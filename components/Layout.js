@@ -4,7 +4,6 @@ import {
   Platform,
   StatusBar,
 } from "react-native";
-import React, { Children } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Footer from "./Footer";
 
@@ -16,11 +15,11 @@ export default function Layout({ children }) {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+        style={{ flex: 1, paddingBottom: 70, backgroundColor: "#9DC462" }}
       >
         {children}
-        <Footer />
       </KeyboardAvoidingView>
+      <Footer />
     </SafeAreaView>
   );
 }

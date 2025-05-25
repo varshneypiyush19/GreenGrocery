@@ -73,20 +73,26 @@
 //     fontWeight: "600",
 //   },
 // });
-import React from "react";
 import { View, Text, FlatList, Button } from "react-native";
 import { useCart } from "../context/CartContext"; // update path as needed
 import { useNavigation } from "@react-navigation/native";
-import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 export default function CartScreen() {
   const { cartItems, removeFromCart, clearCart, getTotal } = useCart();
   const navigation = useNavigation();
   return (
     <Layout>
-      <View style={{ flex: 1, padding: 16, marginBottom: 50 }}>
+      <View
+        style={{
+          flex: 1,
+          padding: 16,
+          marginBottom: 50,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {cartItems.length === 0 ? (
-          <Text>Your cart is empty.</Text>
+          <Text style={{ fontWeight: "bold" }}>Your cart is empty.</Text>
         ) : (
           <FlatList
             data={cartItems}

@@ -1,20 +1,4 @@
-// import React from "react";
-// import { View, Text, Button } from "react-native";
-
-// export default function OrderConfirmationScreen({ navigation }) {
-//   return (
-//     <View>
-//       <Text>Order Placed Successfully!</Text>
-//       <Button
-//         title="Track Order"
-//         onPress={() => navigation.navigate("Orders")}
-//       />
-//       <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
-//     </View>
-//   );
-// }
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default function OrderConfirmationScreen({ navigation }) {

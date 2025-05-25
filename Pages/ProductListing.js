@@ -249,8 +249,8 @@
 
 // export default ProductListingScreen;
 
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { Text, FlatList, TouchableOpacity } from "react-native";
 
 import { db } from "../firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";

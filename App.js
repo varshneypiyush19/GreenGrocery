@@ -16,16 +16,15 @@ import CartScreen from "./Pages/Cart";
 import CheckoutScreen from "./Pages/Checkout";
 import OrderConfirmationScreen from "./Pages/OrderConfirmation";
 import OrdersScreen from "./Pages/TrackOrder";
-import NotFoundScreen from "./Pages/NotFoundScreen";
-import VendorScreen from "./Pages/VendorScreen";
 import { CartProvider } from "./context/CartContext";
 import ProfileScreen from "./Pages/Profile";
-// Stack Navigator
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -33,6 +32,7 @@ export default function App() {
     });
     return unsubscribe;
   }, []);
+
   if (checkingAuth)
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -62,7 +62,6 @@ export default function App() {
             },
           })}
         >
-          <Stack.Screen name="Vendor" component={VendorScreen} />
           <Stack.Screen
             name="Home"
             component={HomeScreen}
@@ -70,7 +69,7 @@ export default function App() {
               headerLeft: () => (
                 <View>
                   <Image
-                    source={require("./assets/Logo.jpg")}
+                    source={require("./assets/Logo.png")}
                     style={{ width: 40, height: 40, marginRight: 10 }}
                   />
                 </View>
@@ -97,11 +96,6 @@ export default function App() {
             component={OrderConfirmationScreen}
           />
           <Stack.Screen name="Orders" component={OrdersScreen} />
-          <Stack.Screen
-            name="NotFound"
-            component={NotFoundScreen}
-            options={{ title: "404" }}
-          />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

@@ -1,6 +1,4 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import React from "react";
-
 import { useCart } from "../context/CartContext";
 export default function AddToCartButton({ product }) {
   const { addToCart, getQuantity, updateQuantity, removeFromCart } = useCart();

@@ -178,7 +178,7 @@
 // });
 
 // export default LoginScreen;
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -194,6 +194,7 @@ import {
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { StatusBar } from "expo-status-bar";
 
 // Custom colors
 const COLORS = {
@@ -296,10 +297,11 @@ const LoginScreen = ({ navigation }) => {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
+        <StatusBar style="dark" />
         {/* Logo placeholder - replace with your actual logo */}
         <View style={styles.logoContainer}>
           <Image
-            source={require("../assets/Logo.jpg")} // Update path to your logo
+            source={require("../assets/Logo.png")} // Update path to your logo
             style={styles.logo}
             resizeMode="contain"
           />
@@ -351,7 +353,10 @@ const LoginScreen = ({ navigation }) => {
         {/* Forgot Password Link */}
         <TouchableOpacity
           style={styles.forgotPassword}
-          onPress={() => navigation.navigate("ForgotPassword")}
+          onPress={() => {
+            Alert.alert("This Feature will come in next Update");
+          }}
+          // onPress={() => navigation.navigate("ForgotPassword")}
           disabled={loading}
         >
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
@@ -374,6 +379,14 @@ const LoginScreen = ({ navigation }) => {
           )}
         </TouchableOpacity>
 
+        {/* <View style={styles.loginPhoneContainer}>
+          <Text style={styles.loginText}>
+            Continue with Phone Number Instead ?
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+            <Text style={styles.signUpLink}> Phone Number</Text>
+          </TouchableOpacity>
+        </View> */}
         {/* Sign Up Link */}
         <View style={styles.signUpContainer}>
           <Text style={styles.signUpText}>Don't have an account? </Text>
@@ -400,9 +413,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 20,
   },
+  loginPhoneContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 30,
+    borderWidth: 0,
+    marginBottom: 20,
+    paddingTop: 20,
   },
   logo: {
     width: 150,

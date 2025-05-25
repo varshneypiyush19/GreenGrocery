@@ -1,28 +1,9 @@
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import demoImage from "../assets/Logo.jpg"; //
-import { useNavigation } from "@react-navigation/native"; // Assuming you're using React Navigation
-// import { useCart } from "../context/CartContext"; // Assuming you have a context for cart management
+import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import demoImage from "../assets/Logo.png"; //
+import { useNavigation } from "@react-navigation/native"; // Assuming you have a context for cart management
 import AddToCartButton from "./AddToCartButton";
 export default function ItemCard({ product }) {
   const navigation = useNavigation();
-  // const { addToCart, getQuantity, removeFromCart } = useCart();
-  // const [quantity, setQuantity] = useState(getQuantity(product.id) || 0); // Initialize quantity from context
-  // const increment = () => {
-  //   const newQty = quantity + 1;
-  //   setQuantity(newQty);
-  //   addToCart(product, 1);
-  // };
-
-  // const decrement = () => {
-  //   if (quantity > 1) {
-  //     setQuantity(quantity - 1);
-  //     addToCart(product, -1); // decrease quantity
-  //   } else if (quantity === 1) {
-  //     setQuantity(0);
-  //     removeFromCart(product.id); // remove when count is 0
-  //   }
-  // }; // Assuming you have a context or function to add to cart
 
   return (
     <TouchableOpacity
@@ -38,21 +19,6 @@ export default function ItemCard({ product }) {
       <Text style={styles.name}>{product.name}</Text>
       <Text style={styles.name}>₹{product.price}</Text>
       <AddToCartButton product={product} />
-      {/* {quantity === 0 ? (
-        <TouchableOpacity onPress={increment} style={styles.addBtn}>
-          <Text style={styles.addText}>Add to Cart</Text>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.quantityBox}>
-          <TouchableOpacity onPress={decrement} style={styles.qBtn}>
-            <Text style={styles.qText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.qty}>{quantity}</Text>
-          <TouchableOpacity onPress={increment} style={styles.qBtn}>
-            <Text style={styles.qText}>+</Text>
-          </TouchableOpacity>
-        </View>
-      )} */}
     </TouchableOpacity>
   );
 }
@@ -61,7 +27,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     padding: 16,
-    margin: 8,
+    margin: 16,
     borderRadius: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,

@@ -448,10 +448,9 @@
 //     marginTop: 10,
 //   },
 // });
-import React from "react";
 import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import demoImage from "../assets/Logo.jpg";
+import demoImage from "../assets/Logo1.png";
 import AddToCartButton from "../components/AddToCartButton";
 import Layout from "../components/Layout";
 
@@ -478,40 +477,6 @@ export default function ProductDetailsScreen() {
           <Text style={styles.price}>₹{product.price}</Text>
           <Text style={styles.description}>{product.description}</Text>
           <AddToCartButton product={product} />
-          {/* {quantity === 0 ? (
-          <TouchableOpacity
-            onPress={() => addToCart(product, 1)}
-            style={styles.addBtn}
-          >
-            <Text style={styles.addText}>Add to Cart</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.quantityBox}>
-            <TouchableOpacity onPress={decrement} style={styles.qBtn}>
-              <Text style={styles.qText}>-</Text>
-            </TouchableOpacity>
-            <Text style={styles.qty}>{quantity}</Text>
-            <TouchableOpacity onPress={increment} style={styles.qBtn}>
-              <Text style={styles.qText}>+</Text>
-            </TouchableOpacity>
-          </View>
-        )} */}
-          {/* <View style={styles.quantitySection}>
-          <TouchableOpacity style={styles.qtyButton} onPress={decreaseQuantity}>
-            <Text style={styles.qtyText}>−</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantity}>{quantity}</Text>
-          <TouchableOpacity style={styles.qtyButton} onPress={increaseQuantity}>
-            <Text style={styles.qtyText}>+</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-          style={styles.addToCartButton}
-          onPress={() => console.log("Added to Cart", product, "x", quantity)}
-        >
-          <Text style={styles.addToCartText}>Add to Cart</Text>
-        </TouchableOpacity> */}
         </View>
       </View>
     </Layout>

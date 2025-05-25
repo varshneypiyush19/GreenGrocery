@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,20 +7,20 @@ import {
   ActivityIndicator,
   Image,
 } from "react-native";
-import { getAuth, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
-import app from "../firebaseConfig"; // or "firebase/auth" if you're using web SDK
+import { auth } from "../firebaseConfig"; // or "firebase/auth" if you're using web SDK
 import Layout from "../components/Layout";
 
 export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const [checkingAuth, setCheckingAuth] = useState(true);
   useEffect(() => {
-    const auth = getAuth(app);
-    const currentUser = auth.currentUser;
-    setUser(currentUser);
-    setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setCheckingAuth(false);
+    });
+    return unsubscribe;
   }, []);
 
   const handleLogout = async () => {
@@ -34,15 +34,12 @@ export default function ProfileScreen({ navigation }) {
       console.error("Logout Error:", error);
     }
   };
-
-  if (loading) {
+  if (checkingAuth)
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#1e90ff" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#483D8B" />
       </View>
     );
-  }
-
   return (
     <Layout>
       <View style={styles.container}>
@@ -63,7 +60,7 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#9DC462",
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 10,
-    color: "#1e90ff",
+    color: "black",
   },
   buttonContainer: {
     marginTop: 30,

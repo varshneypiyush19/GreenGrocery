@@ -199,7 +199,7 @@
 // });
 
 // export default RegisterScreen;
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -215,6 +215,7 @@ import {
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { StatusBar } from "expo-status-bar";
 
 // Color constants
 const COLORS = {
@@ -339,17 +340,17 @@ const RegisterScreen = ({ navigation }) => {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
+        <StatusBar style="dark" />
         {/* Logo placeholder */}
         <View style={styles.logoContainer}>
           <Image
-            source={require("../assets/Logo.jpg")} // Update with your logo path
+            source={require("../assets/Logo.png")} // Update with your logo path
             style={styles.logo}
             resizeMode="contain"
           />
         </View>
 
         <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Join our community today</Text>
 
         {/* Email Input */}
         <View style={styles.inputContainer}>
@@ -432,6 +433,14 @@ const RegisterScreen = ({ navigation }) => {
           )}
         </TouchableOpacity>
 
+        {/* <View style={styles.loginPhoneContainer}>
+          <Text style={styles.loginText}>
+            Continue with Phone Number Instead ?
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+            <Text style={styles.loginLink}> Phone Number</Text>
+          </TouchableOpacity>
+        </View> */}
         {/* Login Link */}
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Already have an account? </Text>
@@ -452,6 +461,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.light,
   },
+  loginPhoneContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
   scrollContent: {
     flexGrow: 1,
     justifyContent: "center",
@@ -463,8 +477,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 150,
+    height: 150,
   },
   title: {
     fontSize: 28,

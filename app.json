@@ -4,12 +4,13 @@
     "slug": "GreenGrocery",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logo.jpg",
+    "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+
     "splash": {
-      "image": "./assets/Logo.jpg",
-      "resizeMode": "contain",
+      "image": "./assets/Logo.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
@@ -22,17 +23,21 @@
       "STORAGEBUCKET": "green-grocery-1345b.firebasestorage.app",
       "MESSAGINGSENDERID": "499873716784",
       "APPID": "1:499873716784:web:18b5e84fde84840c71ebf5",
-      "MEASUREMENTID": "G-QRDPLHMVL1"
+      "MEASUREMENTID": "G-QRDPLHMVL1",
+      "eas": {
+        "projectId": "d06464fa-065e-40ff-bf0b-c4d86ef463fd"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Logo.jpg",
+        "foregroundImage": "./assets/Logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.varshneypiyush19.GreenGrocery"
     },
     "web": {
-      "favicon": "./assets/Logo.jpg"
+      "favicon": "./assets/Logo.png"
     }
   }
 }
