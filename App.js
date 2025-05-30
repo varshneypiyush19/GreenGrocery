@@ -46,21 +46,27 @@ export default function App() {
         <Stack.Navigator
           initialRouteName={user ? "Home" : "Login"}
           screenOptions={({ navigation }) => ({
-            headerRight: () => (
-              <View style={{ marginRight: 10 }}>
-                <Icon
-                  name="cart-outline"
-                  size={25}
-                  color="#483D8B"
-                  onPress={() => navigation.navigate("Cart")}
-                />
-              </View>
-            ),
-            title: "Green Grocery",
-
+            headerTitle: "Green Grocery",
+            headerTitlejustifyContent: "center",
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerStyle: {
+              backgroundColor: "#f9f9f9",
+              shadowColor: "transparent", // Removes shadow for a clean look
+              elevation: 0,
+            },
+            headerRight: () =>
+              user ? (
+                <View style={{ marginRight: 16 }}>
+                  <Icon
+                    name="cart-outline"
+                    size={24}
+                    color="#483D8B"
+                    onPress={() => navigation.navigate("Cart")}
+                  />
+                </View>
+              ) : null,
           })}
         >
           <Stack.Screen
@@ -68,10 +74,10 @@ export default function App() {
             component={HomeScreen}
             options={{
               headerLeft: () => (
-                <View>
+                <View style={{ marginRight: 16 }}>
                   <Image
                     source={require("./assets/Logo.png")}
-                    style={{ width: 40, height: 40, marginRight: 10 }}
+                    style={{ width: 60, height: 60, resizeMode: "contain" }}
                   />
                 </View>
               ),

@@ -348,8 +348,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ItemCard from "../components/ItemCard";
 import Layout from "../components/Layout";
 
-import FastImage from "react-native-fast-image";
-
 export default function HomeScreen({ navigation }) {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -423,7 +421,6 @@ export default function HomeScreen({ navigation }) {
                     <Image
                       source={{
                         uri: cat.imageUrl,
-                        priority: FastImage.priority.normal,
                       }}
                       // source={{ uri: cat.imageUrl }}
                       alt={cat.name}

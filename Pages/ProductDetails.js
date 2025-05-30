@@ -370,7 +370,6 @@
 //   ActivityIndicator,
 // } from "react-native";
 // import { useRoute } from "@react-navigation/native"; // For getting route params
-// import demoImage from "../assets/Logo.jpg"; //
 
 // export default function ProductDetailsScreen() {
 //   const route = useRoute(); // Get the params passed from HomeScreen
@@ -450,11 +449,8 @@
 // });
 import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import demoImage from "../assets/Logo1.png";
 import AddToCartButton from "../components/AddToCartButton";
 import Layout from "../components/Layout";
-
-import FastImage from "react-native-fast-image";
 export default function ProductDetailsScreen() {
   const route = useRoute();
   const { product } = route.params;
@@ -471,7 +467,6 @@ export default function ProductDetailsScreen() {
         <Image
           source={{
             uri: product.imageUrl,
-            priority: FastImage.priority.normal,
           }}
           // source={product.image ? { uri: product.image } : demoImage}
           style={styles.image}

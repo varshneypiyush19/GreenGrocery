@@ -7,14 +7,22 @@
     "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-
     "splash": {
       "image": "./assets/Logo.png",
-      "resizeMode": "cover",
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "enabled": false,
+      "checkAutomatically": "OFF"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "image": "./assets/Logo.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
     },
     "extra": {
       "APIKEY": "AIzaSyDU-qWEjVmzt1-5T6COTZ1busoTfQ-9CgY",
@@ -33,8 +41,13 @@
         "foregroundImage": "./assets/Logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.varshneypiyush19.GreenGrocery"
+      "edgeToEdgeEnabled": false,
+      "package": "com.varshneypiyush19.GreenGrocery",
+      "splash": {
+        "image": "./assets/Logo.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
     },
     "web": {
       "favicon": "./assets/Logo.png"
