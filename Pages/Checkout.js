@@ -76,8 +76,15 @@
 //     textAlign: "center",
 //   },
 // });
-import React from "react";
-import { View, Text, Button, FlatList, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  StyleSheet,
+  Alert,
+  Image,
+} from "react-native";
 import { useCart } from "../context/CartContext";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -144,6 +151,45 @@ export default function CheckoutScreen() {
 
       <FlatList
         data={cartItems}
+        keyExtractor={(item) => item.product.id}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              marginBottom: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Image
+              source={{ uri: item.product.imageUrl }}
+              style={{
+                width: 50,
+                height: 50,
+                resizeMode: "contain",
+                marginRight: 12,
+              }}
+            />
+            <View style={{ flex: 1 }}>
+              <Text>{item.product.title}</Text>
+              <Text>Qty: {item.quantity}</Text>
+              <Text>Price: ₹{item.product.price * item.quantity}</Text>
+            </View>
+          </View>
+        )}
+        ListFooterComponent={
+          <View key="footer" style={{ marginTop: 10, width: "100%" }}>
+            <Text style={{ fontSize: 18, marginVertical: 10 }}>
+              Total: ₹{getTotal()}
+            </Text>
+            <Button title="Place Order" onPress={confirmOrder} />
+          </View>
+        }
+      />
+
+      {/* <FlatList
+        data={cartItems}
         keyExtractor={(item) => item.product.id.toString()}
         renderItem={renderItem}
         ListFooterComponent={
@@ -152,7 +198,7 @@ export default function CheckoutScreen() {
             <Button title="Place Order" onPress={confirmOrder} />
           </View>
         }
-      />
+      /> */}
     </View>
   );
 }

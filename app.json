@@ -17,13 +17,13 @@
       "supportsTablet": true
     },
     "extra": {
-      "APIKEY": "AIzaSyACvJxaYrUuuL9sUzXoL6eEEztXDCcDrjk",
-      "AUTHDOMAIN": "green-grocery-1345b.firebaseapp.com",
-      "PROJECTID": "green-grocery-1345b",
-      "STORAGEBUCKET": "green-grocery-1345b.firebasestorage.app",
-      "MESSAGINGSENDERID": "499873716784",
-      "APPID": "1:499873716784:web:18b5e84fde84840c71ebf5",
-      "MEASUREMENTID": "G-QRDPLHMVL1",
+      "APIKEY": "AIzaSyDU-qWEjVmzt1-5T6COTZ1busoTfQ-9CgY",
+      "AUTHDOMAIN": "greengrocery-b1f8b.firebaseapp.com",
+      "PROJECTID": "greengrocery-b1f8b",
+      "STORAGEBUCKET": "greengrocery-b1f8b.firebasestorage.app",
+      "MESSAGINGSENDERID": "192596191954",
+      "APPID": "1:192596191954:web:6b39c90846cab8f8fc5b0b",
+      "MEASUREMENTID": "G-SS86VV5EV2",
       "eas": {
         "projectId": "d06464fa-065e-40ff-bf0b-c4d86ef463fd"
       }

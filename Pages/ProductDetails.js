@@ -454,6 +454,7 @@ import demoImage from "../assets/Logo1.png";
 import AddToCartButton from "../components/AddToCartButton";
 import Layout from "../components/Layout";
 
+import FastImage from "react-native-fast-image";
 export default function ProductDetailsScreen() {
   const route = useRoute();
   const { product } = route.params;
@@ -468,12 +469,16 @@ export default function ProductDetailsScreen() {
     <Layout>
       <View style={styles.container}>
         <Image
-          source={product.image ? { uri: product.image } : demoImage}
+          source={{
+            uri: product.imageUrl,
+            priority: FastImage.priority.normal,
+          }}
+          // source={product.image ? { uri: product.image } : demoImage}
           style={styles.image}
         />
 
         <View style={styles.detailsContainer}>
-          <Text style={styles.name}>{product.name}</Text>
+          <Text style={styles.name}>{product.title}</Text>
           <Text style={styles.price}>₹{product.price}</Text>
           <Text style={styles.description}>{product.description}</Text>
           <AddToCartButton product={product} />

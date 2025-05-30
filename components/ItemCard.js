@@ -1,5 +1,7 @@
 import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import demoImage from "../assets/Logo.png"; //
+
+import FastImage from "react-native-fast-image";
 import { useNavigation } from "@react-navigation/native"; // Assuming you have a context for cart management
 import AddToCartButton from "./AddToCartButton";
 export default function ItemCard({ product }) {
@@ -11,12 +13,12 @@ export default function ItemCard({ product }) {
       onPress={() => navigation.navigate("ProductDetails", { product })} // Navigate to product details screen
     >
       <Image
-        source={product.image ? { uri: product.image } : demoImage}
+        source={{ uri: product.imageUrl, priority: FastImage.priority.normal }}
         style={styles.image}
       />
       {/* <Image source={{ uri: product.image }} style={styles.image} /> */}
-      <Text style={styles.name}>{product.weight}</Text>
-      <Text style={styles.name}>{product.name}</Text>
+      {/* <Text style={styles.name}>{product.weight}</Text> */}
+      <Text style={styles.name}>{product.title}</Text>
       <Text style={styles.name}>₹{product.price}</Text>
       <AddToCartButton product={product} />
     </TouchableOpacity>

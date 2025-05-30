@@ -337,7 +337,6 @@ import {
   View,
   Text,
   TextInput,
-  FlatList,
   TouchableOpacity,
   StyleSheet,
   Image,
@@ -349,32 +348,33 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ItemCard from "../components/ItemCard";
 import Layout from "../components/Layout";
 
-const fixedCategories = [
-  { label: "Fruits", image: require("../assets/fruits.png") },
-  {
-    label: "Vegetables",
-    image: require("../assets/vegetables.png"),
-  },
-  { label: "Milk", image: require("../assets/milk.png") },
-  {
-    label: "Breads, Eggs & Butter",
-    image: require("../assets/bread.png"),
-  },
-  {
-    label: "Paneer & Cheese",
-    image: require("../assets/cheese.png"),
-  },
-  {
-    label: "Yogurt & Drink",
-    image: require("../assets/yogurt.png"),
-  },
-  { label: "Pooja Needs", image: require("../assets/puja.png") },
-];
+import FastImage from "react-native-fast-image";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "categories"));
+        const fetchedCategories = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -388,12 +388,6 @@ export default function HomeScreen() {
 
     fetchData();
   }, []);
-
-  const filteredProducts = products.filter(
-    (p) =>
-      (!selectedCategory || p.category === selectedCategory) &&
-      p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <Layout>
@@ -412,54 +406,66 @@ export default function HomeScreen() {
         {/* Fresh & Dairy Section */}
         <Text style={styles.sectionTitle}>Fresh & Dairy</Text>
         <View style={styles.categoryGrid}>
-          {fixedCategories.map((cat, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.categoryItem}
-              onPress={() =>
-                setSelectedCategory(
-                  selectedCategory === cat.label ? null : cat.label
-                )
-              }
-            >
-              <View
-                style={[
-                  styles.iconWrapper,
-                  selectedCategory === cat.label && styles.selectedIconWrapper,
-                ]}
+          {loading ? (
+            <Text style={{ marginLeft: 16 }}>Loading categories...</Text>
+          ) : (
+            categories.map((cat, index) => (
+              <TouchableOpacity
+                key={cat.id}
+                style={styles.categoryItem}
+                onPress={() =>
+                  navigation.navigate("Category", { category: cat })
+                }
               >
-                <Image source={cat.image} style={styles.icon} />
-              </View>
-              <Text
-                style={[
-                  styles.categoryText,
-                  selectedCategory === cat.label && styles.selectedCategoryText,
-                ]}
-              >
-                {cat.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                {/* {console.log(cat)} */}
+                <View style={[styles.iconWrapper]}>
+                  {cat.imageUrl ? (
+                    <Image
+                      source={{
+                        uri: cat.imageUrl,
+                        priority: FastImage.priority.normal,
+                      }}
+                      // source={{ uri: cat.imageUrl }}
+                      alt={cat.name}
+                      style={styles.icon}
+                      onError={() =>
+                        console.log("Error loading image:", cat.imageUrl)
+                      }
+                    />
+                  ) : (
+                    <Text>No Image</Text>
+                  )}
+
+                  {/* <Image
+                    source={{
+                      uri: cat.imageUrl,
+                    }}
+                    // alt={cat.name}
+                    style={styles.icon}
+                  /> */}
+                </View>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === cat.name &&
+                      styles.selectedCategoryText,
+                  ]}
+                >
+                  {cat.name}
+                </Text>
+              </TouchableOpacity>
+            ))
+          )}
         </View>
 
-        {/* Monthly Grocery Placeholder */}
         <Text style={styles.sectionTitle}>Monthly Grocery</Text>
-        {/* <View style={styles.monthlyContainer}></View> */}
-
-        {/* Product Grid */}
-        {/* <FlatList
-          data={filteredProducts}
-          contentContainerStyle={styles.productListContainer}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ItemCard product={item} />}
-        /> */}
-        {/* <ScrollView contentContainerStyle={styles.productListContainer}> */}
-        {filteredProducts.map((item) => (
-          <ItemCard key={item.id} product={item} />
-        ))}
-        {/* </ScrollView> */}
-
-        {/* <Footer /> */}
+        <View style={styles.productGrid}>
+          {products.map((item) => (
+            <View key={item.id} style={styles.productWrapper}>
+              <ItemCard product={item} />
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </Layout>
   );
@@ -473,7 +479,8 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     marginHorizontal: 16,
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 10,
     backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
@@ -500,18 +507,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    paddingVertical: 10,
-    justifyContent: "flex-start",
+    paddingVertical: 30,
+    paddingBottom: 10,
+    justifyContent: "space-between",
   },
   categoryItem: {
-    width: "30%",
+    width: "50%",
     alignItems: "center",
-    marginBottom: 12,
-    marginHorizontal: "1.66%",
+    marginBottom: 30,
   },
   iconWrapper: {
-    width: 60,
-    height: 60,
+    width: 120,
+    height: 120,
     borderRadius: 12,
     backgroundColor: "#E0F3D9",
     justifyContent: "center",
@@ -522,14 +529,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
   },
   icon: {
-    width: 32,
-    height: 32,
-    resizeMode: "contain",
+    width: 120,
+    height: 120,
+    resizeMode: "cover",
   },
   categoryText: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "center",
     color: "#333",
+    marginTop: 5,
+    fontWeight: "bold",
   },
   selectedCategoryText: {
     // color: "#fff",
@@ -543,5 +552,16 @@ const styles = StyleSheet.create({
   productListContainer: {
     paddingHorizontal: 8,
     paddingBottom: 100,
+  },
+  productGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingHorizontal: 16, // Add this
+  },
+
+  productWrapper: {
+    width: "48%",
+    marginBottom: 12,
   },
 });

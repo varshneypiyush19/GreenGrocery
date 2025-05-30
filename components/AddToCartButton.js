@@ -13,7 +13,7 @@ export default function AddToCartButton({ product }) {
     }
   };
   return (
-    <View>
+    <View style={{ width: "100%" }}>
       {quantity === 0 ? (
         <TouchableOpacity
           onPress={() => addToCart(product, 1)}
@@ -59,8 +59,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addBtn: {
+    width: "100%",
+    alignItems: "center",
     backgroundColor: "#4CAF50",
-    paddingVertical: 6,
+    paddingVertical: 13,
     paddingHorizontal: 16,
     borderRadius: 20,
   },
@@ -71,14 +73,14 @@ const styles = StyleSheet.create({
   quantityBox: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
+    justifyContent: "space-around",
     backgroundColor: "#f0f0f0",
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 10,
   },
   qBtn: {
-    padding: 8,
+    paddingHorizontal: 8,
   },
   qText: {
     fontSize: 18,

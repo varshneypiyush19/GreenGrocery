@@ -18,6 +18,7 @@ import OrderConfirmationScreen from "./Pages/OrderConfirmation";
 import OrdersScreen from "./Pages/TrackOrder";
 import { CartProvider } from "./context/CartContext";
 import ProfileScreen from "./Pages/Profile";
+import CategoryScreen from "./Pages/CategoryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -96,6 +97,7 @@ export default function App() {
             component={OrderConfirmationScreen}
           />
           <Stack.Screen name="Orders" component={OrdersScreen} />
+          <Stack.Screen name="Category" component={CategoryScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
