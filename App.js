@@ -19,6 +19,7 @@ import OrdersScreen from "./Pages/TrackOrder";
 import { CartProvider } from "./context/CartContext";
 import ProfileScreen from "./Pages/Profile";
 import CategoryScreen from "./Pages/CategoryScreen";
+// import PhoneSignInScreen from "./Pages/SignInWithPhoneNumber";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,7 @@ export default function App() {
           screenOptions={({ navigation }) => ({
             headerTitle: "Green Grocery",
             headerTitlejustifyContent: "center",
+            headerTitleAlign: "center",
             headerTitleStyle: {
               fontWeight: "bold",
             },
@@ -83,8 +85,22 @@ export default function App() {
               ),
             }}
           />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
+
+          {/* <Stack.Screen
+            name="Login"
+            component={PhoneSignInScreen}
+            options={{ headerShown: false }}
+          /> */}
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="Products" component={ProductListingScreen} />
           <Stack.Screen name="ProductDetails" component={ProductDetailScreen} />
           <Stack.Screen

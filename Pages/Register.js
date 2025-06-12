@@ -1,204 +1,3 @@
-// // RegisterScreen.js
-// import React, { useState } from "react";
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Alert,
-//   Image,
-//   KeyboardAvoidingView,
-//   Platform,
-//   ScrollView,
-// } from "react-native";
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "../firebaseConfig";
-
-// // const logo = require('./assets/your-logo-filename.png'); // Uncomment and set your logo path
-
-// const PRIMARY_GREEN = "#9DC462";
-// const DARK_TEXT = "#333333";
-// const INPUT_BORDER_COLOR = "#CCCCCC";
-// const BUTTON_TEXT_COLOR = "#FFFFFF";
-
-// const RegisterScreen = ({ navigation }) => {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [confirmPassword, setConfirmPassword] = useState("");
-//   const [loading, setLoading] = useState(false);
-
-//   const handleRegister = async () => {
-//     if (!email || !password || !confirmPassword) {
-//       Alert.alert("Missing Fields", "Please fill in all fields.");
-//       return;
-//     }
-//     if (password !== confirmPassword) {
-//       Alert.alert("Password Mismatch", "Passwords do not match.");
-//       return;
-//     }
-//     if (password.length < 6) {
-//       Alert.alert("Weak Password", "Password should be at least 6 characters.");
-//       return;
-//     }
-
-//     setLoading(true);
-//     try {
-//       await createUserWithEmailAndPassword(auth, email, password);
-//       Alert.alert(
-//         "Registration Successful!",
-//         "You can now log in with your new account.",
-//         [{ text: "OK", onPress: () => navigation.navigate("Login") }]
-//       );
-//       // Optionally, sign them in automatically or navigate to a profile setup
-//     } catch (error) {
-//       console.error("Registration Error:", error);
-//       let errorMessage = "An error occurred. Please try again.";
-//       if (error.code === "auth/email-already-in-use") {
-//         errorMessage = "This email address is already in use.";
-//       } else if (error.code === "auth/invalid-email") {
-//         errorMessage = "Please enter a valid email address.";
-//       } else if (error.code === "auth/weak-password") {
-//         errorMessage =
-//           "The password is too weak. Please choose a stronger one.";
-//       }
-//       Alert.alert("Registration Failed", errorMessage);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <KeyboardAvoidingView
-//       behavior={Platform.OS === "ios" ? "padding" : "height"}
-//       style={styles.container}
-//     >
-//       <ScrollView contentContainerStyle={styles.scrollContent}>
-//         {/* <Image source={logo} style={styles.logo} resizeMode="contain" /> */}
-//         <Text style={styles.title}>Create Account</Text>
-//         <Text style={styles.subtitle}>Join Green Grocery today!</Text>
-
-//         <TextInput
-//           style={styles.input}
-//           placeholder="Email (e.g., pear@green.com)"
-//           placeholderTextColor="#999"
-//           value={email}
-//           onChangeText={setEmail}
-//           keyboardType="email-address"
-//           autoCapitalize="none"
-//         />
-//         <TextInput
-//           style={styles.input}
-//           placeholder="Password (min. 6 characters)"
-//           placeholderTextColor="#999"
-//           value={password}
-//           onChangeText={setPassword}
-//           secureTextEntry
-//         />
-//         <TextInput
-//           style={styles.input}
-//           placeholder="Confirm Password"
-//           placeholderTextColor="#999"
-//           value={confirmPassword}
-//           onChangeText={setConfirmPassword}
-//           secureTextEntry
-//         />
-//         <TouchableOpacity
-//           style={[styles.button, loading && styles.buttonDisabled]}
-//           onPress={handleRegister}
-//           disabled={loading}
-//         >
-//           <Text style={styles.buttonText}>
-//             {loading ? "Registering..." : "Register"}
-//           </Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-//           <Text style={styles.linkText}>
-//             Already have an account?{" "}
-//             <Text style={styles.linkHighlight}>Login</Text>
-//           </Text>
-//         </TouchableOpacity>
-//       </ScrollView>
-//     </KeyboardAvoidingView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#FFFFFF",
-//   },
-//   scrollContent: {
-//     flexGrow: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     paddingHorizontal: 30,
-//     paddingVertical: 20,
-//   },
-//   logo: {
-//     // Uncomment if you add a logo
-//     width: 120,
-//     height: 120,
-//     marginBottom: 20,
-//   },
-//   title: {
-//     fontSize: 28,
-//     fontWeight: "bold",
-//     color: PRIMARY_GREEN,
-//     marginBottom: 10,
-//     textAlign: "center",
-//   },
-//   subtitle: {
-//     fontSize: 16,
-//     color: DARK_TEXT,
-//     marginBottom: 30,
-//     textAlign: "center",
-//   },
-//   input: {
-//     width: "100%",
-//     height: 50,
-//     backgroundColor: "#F7F7F7",
-//     borderColor: INPUT_BORDER_COLOR,
-//     borderWidth: 1,
-//     borderRadius: 8,
-//     paddingHorizontal: 15,
-//     marginBottom: 15,
-//     fontSize: 16,
-//     color: DARK_TEXT,
-//   },
-//   button: {
-//     width: "100%",
-//     backgroundColor: PRIMARY_GREEN,
-//     paddingVertical: 15,
-//     borderRadius: 8,
-//     alignItems: "center",
-//     marginBottom: 20,
-//     elevation: 2,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 1 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 1.41,
-//   },
-//   buttonDisabled: {
-//     backgroundColor: "#BDBDBD",
-//   },
-//   buttonText: {
-//     color: BUTTON_TEXT_COLOR,
-//     fontSize: 18,
-//     fontWeight: "bold",
-//   },
-//   linkText: {
-//     fontSize: 14,
-//     color: DARK_TEXT,
-//     textAlign: "center",
-//   },
-//   linkHighlight: {
-//     color: PRIMARY_GREEN,
-//     fontWeight: "bold",
-//   },
-// });
-
-// export default RegisterScreen;
 import { useState } from "react";
 import {
   View,
@@ -216,6 +15,7 @@ import {
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import { StatusBar } from "expo-status-bar";
+import LayoutNoFooter from "../components/LayoutNoFooter";
 
 // Color constants
 const COLORS = {
@@ -332,16 +132,9 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <StatusBar style="dark" />
-        {/* Logo placeholder */}
+    <LayoutNoFooter>
+      {/* Logo placeholder */}
+      <View style={styles.container}>
         <View style={styles.logoContainer}>
           <Image
             source={require("../assets/Logo.png")} // Update with your logo path
@@ -451,8 +244,8 @@ const RegisterScreen = ({ navigation }) => {
             <Text style={styles.loginLink}>Log In</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </LayoutNoFooter>
   );
 };
 
@@ -460,6 +253,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.light,
+    paddingHorizontal: 30,
+    paddingTop: 100,
   },
   loginPhoneContainer: {
     flexDirection: "row",

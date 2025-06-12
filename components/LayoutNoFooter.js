@@ -6,9 +6,8 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import Footer from "./Footer";
 
-export default function Layout({ children }) {
+export default function LayoutNoFooter({ children }) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />
@@ -20,10 +19,6 @@ export default function Layout({ children }) {
         >
           {children}
         </KeyboardAvoidingView>
-
-        <View style={styles.footerWrapper}>
-          <Footer />
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -32,25 +27,14 @@ export default function Layout({ children }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#FFFFFF",
   },
   container: {
     flex: 1,
   },
   content: {
     flex: 1,
-    backgroundColor: "#9DC462", // or remove if you want the parent color
+    // backgroundColor: "#9DC462", // or remove if you want the parent color
     paddingBottom: 70, // gives space if Footer is not absolute
-  },
-  footerWrapper: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    backgroundColor: "#fff", // Optional, to make footer stand out
-    elevation: 10, // For shadow on Android
-    shadowColor: "#000", // iOS shadow
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
 });

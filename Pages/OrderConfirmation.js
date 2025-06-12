@@ -1,33 +1,36 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import LayoutNoFooter from "../components/LayoutNoFooter";
 
 export default function OrderConfirmationScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Icon name="checkmark-circle" size={100} color="#4BB543" />
-      <Text style={styles.title}>Order Placed!</Text>
-      <Text style={styles.subtitle}>
-        Your order has been placed successfully.
-      </Text>
-
-      <TouchableOpacity
-        style={[styles.button, styles.trackButton]}
-        onPress={() => navigation.navigate("Orders")}
-      >
-        <Icon name="navigate" size={20} color="#fff" />
-        <Text style={styles.buttonText}>Check Order</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.button, styles.homeButton]}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Icon name="home" size={20} color="#1e90ff" />
-        <Text style={[styles.buttonText, { color: "#1e90ff" }]}>
-          Go to Home
+    <LayoutNoFooter>
+      <View style={styles.container}>
+        <Icon name="checkmark-circle" size={100} color="#4BB543" />
+        <Text style={styles.title}>Order Placed!</Text>
+        <Text style={styles.subtitle}>
+          Your order has been placed successfully.
         </Text>
-      </TouchableOpacity>
-    </View>
+
+        <TouchableOpacity
+          style={[styles.button, styles.trackButton]}
+          onPress={() => navigation.navigate("Orders")}
+        >
+          <Icon name="navigate" size={20} color="#fff" />
+          <Text style={styles.buttonText}>Check Order</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, styles.homeButton]}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Icon name="home" size={20} color="#1e90ff" />
+          <Text style={[styles.buttonText, { color: "#1e90ff" }]}>
+            Go to Home
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </LayoutNoFooter>
   );
 }
 

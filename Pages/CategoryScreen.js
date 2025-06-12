@@ -35,9 +35,6 @@ export default function CategoryScreen({ route }) {
             </View>
           ))}
         </View>
-        {/* {products.map((item) => (
-          <ItemCard key={item.id} product={item} />
-        ))} */}
       </ScrollView>
     </Layout>
   );
@@ -59,7 +56,7 @@ const styles = StyleSheet.create({
   },
 
   productWrapper: {
-    width: "50%",
+    width: "48%",
     marginBottom: 12,
   },
 });

@@ -187,14 +187,12 @@ import {
   StyleSheet,
   Alert,
   Image,
-  KeyboardAvoidingView,
   Platform,
-  ScrollView,
   ActivityIndicator,
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import { StatusBar } from "expo-status-bar";
+import LayoutNoFooter from "../components/LayoutNoFooter";
 
 // Custom colors
 const COLORS = {
@@ -289,15 +287,8 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <StatusBar style="dark" />
+    <LayoutNoFooter>
+      <View style={styles.container}>
         {/* Logo placeholder - replace with your actual logo */}
         <View style={styles.logoContainer}>
           <Image
@@ -397,8 +388,8 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.signUpLink}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </LayoutNoFooter>
   );
 };
 
@@ -406,12 +397,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.light,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: "center",
     paddingHorizontal: 30,
-    paddingVertical: 20,
+    paddingTop: 100,
   },
   loginPhoneContainer: {
     flexDirection: "row",
@@ -419,6 +406,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   logoContainer: {
+    justifyContent: "center",
     alignItems: "center",
     borderWidth: 0,
     marginBottom: 20,

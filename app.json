@@ -14,7 +14,7 @@
     },
     "updates": {
       "enabled": false,
-      "checkAutomatically": "OFF"
+      "checkAutomatically": "ON_LOAD"
     },
     "ios": {
       "supportsTablet": true,

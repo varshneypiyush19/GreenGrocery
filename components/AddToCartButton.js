@@ -1,8 +1,33 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
 import { useCart } from "../context/CartContext";
+import { isStoreOpen } from "../utils/timeUtils";
+import { db } from "../firebaseConfig";
+
 export default function AddToCartButton({ product }) {
   const { addToCart, getQuantity, updateQuantity, removeFromCart } = useCart();
   const quantity = getQuantity(product.id);
+
+  const [storeTiming, setStoreTiming] = useState(null);
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    const fetchTiming = async () => {
+      try {
+        const docRef = doc(db, "timings", "current");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const { from, to } = docSnap.data();
+          setStoreTiming({ from, to });
+          setIsOpen(isStoreOpen(from, to));
+        }
+      } catch (error) {
+        console.error("Failed to fetch timing:", error);
+      }
+    };
+    fetchTiming();
+  }, []);
 
   const increment = () => updateQuantity(product.id, quantity + 1);
   const decrement = () => {
@@ -12,14 +37,38 @@ export default function AddToCartButton({ product }) {
       removeFromCart(product.id);
     }
   };
+
+  const handleAddPress = () => {
+    if (!isOpen) {
+      Alert.alert(
+        "Store Closed",
+        `Store is closed now. We'll open at ${
+          storeTiming?.from || "the scheduled time"
+        }.`
+      );
+      return;
+    }
+    addToCart(product, 1);
+  };
+
   return (
     <View style={{ width: "100%" }}>
       {quantity === 0 ? (
         <TouchableOpacity
-          onPress={() => addToCart(product, 1)}
-          style={styles.addBtn}
+          onPress={handleAddPress}
+          style={[
+            styles.addBtn,
+            { backgroundColor: isOpen ? "#4CAF50" : "#ccc" },
+          ]}
+          // disabled={!isOpen}
+          // onPress={() => addToCart(product, 1)}
+          // style={styles.addBtn}
         >
-          <Text style={styles.addText}>Add to Cart</Text>
+          <Text style={styles.addText}>
+            {isOpen ? "Add to Cart" : "Store Closed"}
+          </Text>
+
+          {/* <Text style={styles.addText}>Add to Cart</Text> */}
         </TouchableOpacity>
       ) : (
         <View style={styles.quantityBox}>
