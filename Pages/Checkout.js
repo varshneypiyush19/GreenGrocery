@@ -329,8 +329,6 @@ import {
   StyleSheet,
   Alert,
   Image,
-  Modal,
-  Pressable,
   TouchableOpacity,
   TextInput, // ✅ Added missing import
 } from "react-native";
@@ -350,6 +348,9 @@ import { app } from "../firebaseConfig";
 import { useState, useEffect } from "react"; // ✅ Added useEffect
 import LayoutNoFooter from "../components/LayoutNoFooter";
 import { getAuth } from "firebase/auth";
+import PaymentMethod from "../components/PaymentMethod";
+import UpiQr from "../components/UpiQr";
+import TimeSlot from "../components/TimeSlot";
 
 const db = getFirestore(app);
 
@@ -361,6 +362,8 @@ export default function CheckoutScreen() {
   const [showQR, setShowQR] = useState(false);
   const [editingAddress, setEditingAddress] = useState(false);
   const [addressInput, setAddressInput] = useState("");
+  const [timeSlotModalVisible, setTimeSlotModalVisible] = useState(false);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
   // ✅ Added missing state variables
   const [userInfo, setUserInfo] = useState(null);
@@ -368,6 +371,32 @@ export default function CheckoutScreen() {
   const [loading, setLoading] = useState(true);
 
   const auth = getAuth(app);
+  const timeSlots = [
+    "8:00 am to 10:00 am",
+    "10:00 am to 12:00 pm",
+    "12:00 pm to 14:00 pm",
+    "14:00 pm to 16:00 pm",
+    "16:00 pm to 18:00 pm",
+    "18:00 pm to 20:00 pm",
+  ];
+  const isSlotValid = (slot, dateType) => {
+    const [startStr, endStr] = slot.split("-");
+    const today = new Date();
+    let checkDate = new Date();
+
+    if (dateType === "tomorrow") {
+      checkDate.setDate(today.getDate() + 1);
+      return true; // all slots valid for tomorrow
+    }
+
+    const startHour = parseInt(startStr);
+    const endHour = parseInt(endStr);
+
+    const nowHour = today.getHours();
+    const nowMinute = today.getMinutes();
+
+    return nowHour < startHour;
+  };
 
   // ✅ Added useEffect to fetch user data on component mount
   useEffect(() => {
@@ -415,6 +444,7 @@ export default function CheckoutScreen() {
         items: cartItems,
         total: getTotal(),
         paymentMethod,
+        deliverySlot: `${selectedTimeSlot.day} ${selectedTimeSlot.slot}`,
         deliveryAddress: userInfo?.address || "", // ✅ Added delivery address
         status: paymentMethod === "Cash" ? "Received" : "Pending",
         createdAt: Timestamp.now(),
@@ -440,6 +470,13 @@ export default function CheckoutScreen() {
       );
       return;
     }
+
+    setTimeSlotModalVisible(true);
+    // setPaymentSelectionVisible(true);
+  };
+  const handleTimeSlotSelection = (slot, day) => {
+    setSelectedTimeSlot({ slot, day });
+    setTimeSlotModalVisible(false);
     setPaymentSelectionVisible(true);
   };
 
@@ -567,108 +604,26 @@ export default function CheckoutScreen() {
           }
         />
       </View>
-
+      <TimeSlot
+        setTimeSlotModalVisible={setTimeSlotModalVisible}
+        timeSlotModalVisible={timeSlotModalVisible}
+        timeSlots={timeSlots}
+        isSlotValid={isSlotValid}
+        handleTimeSlotSelection={handleTimeSlotSelection}
+      />
       {/* Payment Method Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={paymentSelectionVisible}
-        onRequestClose={() => setPaymentSelectionVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Confirm Your Details</Text>
-
-            {/* ✅ Show address in modal for confirmation */}
-            <View style={styles.confirmationSection}>
-              <Text style={styles.confirmationLabel}>Delivery Address:</Text>
-              <Text style={styles.confirmationText}>{userInfo?.address}</Text>
-            </View>
-
-            <Text style={styles.modalText}>How would you like to pay?</Text>
-
-            <TouchableOpacity
-              style={styles.radioOption}
-              onPress={() => setPaymentMethod("Cash")}
-            >
-              <View
-                style={[
-                  styles.radioCircle,
-                  paymentMethod === "Cash" && styles.selected,
-                ]}
-              />
-              <Text style={styles.radioText}>Cash</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.radioOption}
-              onPress={() => setPaymentMethod("UPI")}
-            >
-              <View
-                style={[
-                  styles.radioCircle,
-                  paymentMethod === "UPI" && styles.selected,
-                ]}
-              />
-              <Text style={styles.radioText}>UPI</Text>
-            </TouchableOpacity>
-
-            <Pressable
-              style={[styles.modalButton, { backgroundColor: "#4CAF50" }]}
-              onPress={() => {
-                if (paymentMethod === "Cash") {
-                  placeOrder();
-                } else {
-                  setPaymentSelectionVisible(false);
-                  setShowQR(true);
-                }
-              }}
-            >
-              <Text style={styles.modalButtonText}>Confirm Order</Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => setPaymentSelectionVisible(false)}
-              style={[styles.modalButton, { backgroundColor: "#ccc" }]}
-            >
-              <Text style={{ fontWeight: "bold" }}>Cancel</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+      <PaymentMethod
+        paymentSelectionVisible={paymentSelectionVisible}
+        setPaymentSelectionVisible={setPaymentSelectionVisible}
+        placeOrder={placeOrder}
+        paymentMethod={paymentMethod}
+        setPaymentMethod={setPaymentMethod}
+        setShowQR={setShowQR}
+        userInfo={userInfo}
+      />
 
       {/* UPI QR Code Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showQR}
-        onRequestClose={() => setShowQR(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Pay via UPI</Text>
-            <Image
-              source={require("../assets/upi-qr.png")}
-              style={styles.qrImage}
-            />
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>
-              Scan and pay. Tap below once payment is done.
-            </Text>
-            <Pressable
-              style={[styles.modalButton, { backgroundColor: "#4CAF50" }]}
-              onPress={() => placeOrder()}
-            >
-              <Text style={styles.modalButtonText}>I have paid</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setShowQR(false)}
-              style={[styles.modalButton, { backgroundColor: "#ccc" }]}
-            >
-              <Text style={{ fontWeight: "bold" }}>Cancel</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+      <UpiQr setShowQR={setShowQR} showQR={showQR} placeOrder={placeOrder} />
     </LayoutNoFooter>
   );
 }

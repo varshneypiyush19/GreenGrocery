@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
-import Icon from "react-native-vector-icons/Ionicons";
 
 // Screens
 import LoginScreen from "./Pages/Login";
@@ -19,6 +18,7 @@ import OrdersScreen from "./Pages/TrackOrder";
 import { CartProvider } from "./context/CartContext";
 import ProfileScreen from "./Pages/Profile";
 import CategoryScreen from "./Pages/CategoryScreen";
+import CartIconWithBadge from "./components/CartIconWithBadge";
 // import PhoneSignInScreen from "./Pages/SignInWithPhoneNumber";
 
 const Stack = createNativeStackNavigator();
@@ -58,17 +58,7 @@ export default function App() {
               shadowColor: "transparent", // Removes shadow for a clean look
               elevation: 0,
             },
-            headerRight: () =>
-              user ? (
-                <View style={{ marginRight: 16 }}>
-                  <Icon
-                    name="cart-outline"
-                    size={24}
-                    color="#483D8B"
-                    onPress={() => navigation.navigate("Cart")}
-                  />
-                </View>
-              ) : null,
+            headerRight: () => (user ? <CartIconWithBadge /> : null),
           })}
         >
           <Stack.Screen
@@ -85,7 +75,6 @@ export default function App() {
               ),
             }}
           />
-
           {/* <Stack.Screen
             name="Login"
             component={PhoneSignInScreen}
@@ -125,3 +114,12 @@ export default function App() {
     </CartProvider>
   );
 }
+
+// <View style={{ marginRight: 16 }}>
+//   <Icon
+//     name="cart-outline"
+//     size={24}
+//     color="#483D8B"
+//     onPress={() => navigation.navigate("Cart")}
+//   />
+// </View>

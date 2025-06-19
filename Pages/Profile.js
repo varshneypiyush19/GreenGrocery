@@ -560,7 +560,7 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.cardText}>Name: {userInfo?.name || "User"}</Text>
 
           <Text style={styles.cardText}>
-            Phone: {user.phoneNumber || userInfo?.phone || "N/A"}
+            Phone: {user.phoneNumber || userInfo?.phoneNumber || "N/A"}
           </Text>
 
           <View style={styles.addressRow}>

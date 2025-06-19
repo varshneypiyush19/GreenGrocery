@@ -19,6 +19,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import LayoutNoFooter from "../components/LayoutNoFooter";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { Platform } from "react-native"; // 📍 at the top of file
 
 const COLORS = {
   primary: "#9DC462",
@@ -45,10 +46,12 @@ const PhoneSignInScreen = ({ navigation }) => {
 
   const handleSendCode = async () => {
     setErrorMsg("");
-    if (!phoneNumber || phoneNumber.length < 10) {
-      setErrorMsg("Enter a valid phone number");
+    const trimmedPhone = phoneNumber.trim();
+    if (!trimmedPhone || trimmedPhone.length !== 10) {
+      setErrorMsg("Enter a valid 10-digit phone number");
       return;
     }
+
     if (!name.trim()) {
       setErrorMsg("Name is required");
       return;
@@ -58,7 +61,7 @@ const PhoneSignInScreen = ({ navigation }) => {
     try {
       const phoneProvider = await signInWithPhoneNumber(
         auth,
-        "+91" + phoneNumber,
+        "+91" + trimmedPhone,
         recaptchaVerifier.current
       );
       setVerificationId(phoneProvider.verificationId);
@@ -85,6 +88,11 @@ const PhoneSignInScreen = ({ navigation }) => {
 
   const handleVerifyCode = async () => {
     setErrorMsg("");
+    if (!verificationId) {
+      setErrorMsg("OTP not requested. Please try again.");
+      return;
+    }
+
     if (!otp) {
       setErrorMsg("Enter the verification code");
       return;
@@ -111,8 +119,13 @@ const PhoneSignInScreen = ({ navigation }) => {
         },
       ]);
     } catch (error) {
-      console.error(error);
-      Alert.alert("Verification Failed", error.message || "Invalid code");
+      let message = error.message;
+      if (error.code === "auth/invalid-verification-code") {
+        message = "The verification code is incorrect.";
+      } else if (error.code === "auth/code-expired") {
+        message = "The verification code has expired.";
+      }
+      Alert.alert("Verification Failed", message);
     } finally {
       setLoading(false);
     }
@@ -138,7 +151,11 @@ const PhoneSignInScreen = ({ navigation }) => {
         <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={auth.app.options}
-          attemptInvisibleVerification={true} // 👈 makes it invisible
+          attemptInvisibleVerification={Platform.OS !== "android"} // 👈 safer for Android
+
+          // attemptInvisibleVerification={
+          //   Platform.OS === "android" ? false : true
+          // } // 👈 makes it invisible
         />
 
         <View style={styles.logoContainer}>
@@ -321,3 +338,115 @@ const styles = StyleSheet.create({
 });
 
 export default PhoneSignInScreen;
+
+// import React, { useState } from "react";
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   StyleSheet,
+//   Alert,
+// } from "react-native";
+// import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
+// import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+// import Constants from "expo-constants";
+// import { auth } from "../firebaseConfig";
+
+// export default function SignInWithPhoneNumber() {
+//   const [phoneNumber, setPhoneNumber] = useState("");
+//   const [verificationId, setVerificationId] = useState(null);
+//   const [code, setCode] = useState("");
+//   const recaptchaVerifier = React.useRef(null);
+
+//   const sendVerification = async () => {
+//     try {
+//       const provider = new PhoneAuthProvider(auth);
+//       const id = await provider.verifyPhoneNumber(
+//         phoneNumber,
+//         recaptchaVerifier.current
+//       );
+//       setVerificationId(id);
+//       Alert.alert("Code Sent", "Please check your phone.");
+//     } catch (err) {
+//       console.log(err);
+//       Alert.alert("Error", err.message);
+//     }
+//   };
+
+//   const confirmCode = async () => {
+//     try {
+//       const credential = PhoneAuthProvider.credential(verificationId, code);
+//       await signInWithCredential(auth, credential);
+//       Alert.alert("Success ✅", "Phone number verified and user signed in!");
+//     } catch (err) {
+//       console.log(err);
+//       Alert.alert("Error", err.message);
+//     }
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <FirebaseRecaptchaVerifierModal
+//         ref={recaptchaVerifier}
+//         firebaseConfig={{
+//           apiKey: Constants.expoConfig.extra.APIKEY,
+//           authDomain: Constants.expoConfig.extra.AUTHDOMAIN,
+//           projectId: Constants.expoConfig.extra.PROJECTID,
+//           storageBucket: Constants.expoConfig.extra.STORAGEBUCKET,
+//           messagingSenderId: Constants.expoConfig.extra.MESSAGINGSENDERID,
+//           appId: Constants.expoConfig.extra.APPID,
+//         }}
+//       />
+
+//       <Text style={styles.title}>Phone Auth</Text>
+
+//       <TextInput
+//         placeholder="+91XXXXXXXXXX"
+//         value={phoneNumber}
+//         onChangeText={setPhoneNumber}
+//         keyboardType="phone-pad"
+//         style={styles.input}
+//       />
+
+//       <TouchableOpacity style={styles.button} onPress={sendVerification}>
+//         <Text style={styles.buttonText}>Send Code</Text>
+//       </TouchableOpacity>
+
+//       {verificationId && (
+//         <>
+//           <TextInput
+//             placeholder="Verification Code"
+//             value={code}
+//             onChangeText={setCode}
+//             keyboardType="number-pad"
+//             style={styles.input}
+//           />
+//           <TouchableOpacity style={styles.button} onPress={confirmCode}>
+//             <Text style={styles.buttonText}>Verify Code</Text>
+//           </TouchableOpacity>
+//         </>
+//       )}
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: { padding: 20, flex: 1, justifyContent: "center" },
+//   title: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: "#ccc",
+//     padding: 12,
+//     borderRadius: 8,
+//     marginBottom: 15,
+//   },
+//   button: {
+//     backgroundColor: "#007AFF",
+//     padding: 15,
+//     borderRadius: 8,
+//     alignItems: "center",
+//     marginBottom: 10,
+//   },
+//   buttonText: { color: "#fff", fontWeight: "bold" },
+// });

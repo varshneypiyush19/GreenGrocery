@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Footer from "./Footer";
-
+import FloatingHelpButton from "./HelpButton";
 export default function Layout({ children }) {
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -25,6 +25,7 @@ export default function Layout({ children }) {
           <Footer />
         </View>
       </View>
+      <FloatingHelpButton />
     </SafeAreaView>
   );
 }

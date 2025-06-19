@@ -35,6 +35,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     // backgroundColor: "#9DC462", // or remove if you want the parent color
-    paddingBottom: 70, // gives space if Footer is not absolute
+    paddingBottom: 50, // gives space if Footer is not absolute
   },
 });

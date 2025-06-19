@@ -11,6 +11,7 @@ export default function AddToCartButton({ product }) {
 
   const [storeTiming, setStoreTiming] = useState(null);
   const [isOpen, setIsOpen] = useState(true);
+  const isOutOfStock = product?.Qty <= 0 || product?.outOfStock === true;
 
   useEffect(() => {
     const fetchTiming = async () => {
@@ -29,7 +30,13 @@ export default function AddToCartButton({ product }) {
     fetchTiming();
   }, []);
 
-  const increment = () => updateQuantity(product.id, quantity + 1);
+  const increment = () => {
+    if (quantity >= product.Qty) {
+      Alert.alert("Limit Reached", "Cannot add more than available stock.");
+      return;
+    }
+    updateQuantity(product.id, quantity + 1);
+  };
   const decrement = () => {
     if (quantity > 1) {
       updateQuantity(product.id, quantity - 1);
@@ -39,6 +46,7 @@ export default function AddToCartButton({ product }) {
   };
 
   const handleAddPress = () => {
+    if (isOutOfStock) return;
     if (!isOpen) {
       Alert.alert(
         "Store Closed",
@@ -58,17 +66,20 @@ export default function AddToCartButton({ product }) {
           onPress={handleAddPress}
           style={[
             styles.addBtn,
-            { backgroundColor: isOpen ? "#4CAF50" : "#ccc" },
+            { backgroundColor: !isOpen || isOutOfStock ? "#ccc" : "#4CAF50" },
           ]}
-          // disabled={!isOpen}
-          // onPress={() => addToCart(product, 1)}
-          // style={styles.addBtn}
+          disabled={isOutOfStock || !isOpen}
         >
-          <Text style={styles.addText}>
+          {/* <Text style={styles.addText}>
             {isOpen ? "Add to Cart" : "Store Closed"}
+          </Text> */}
+          <Text style={styles.addText}>
+            {!isOpen
+              ? "Store Closed"
+              : isOutOfStock
+              ? "Out of Stock"
+              : "Add to Cart"}
           </Text>
-
-          {/* <Text style={styles.addText}>Add to Cart</Text> */}
         </TouchableOpacity>
       ) : (
         <View style={styles.quantityBox}>
@@ -76,7 +87,11 @@ export default function AddToCartButton({ product }) {
             <Text style={styles.qText}>-</Text>
           </TouchableOpacity>
           <Text style={styles.qty}>{quantity}</Text>
-          <TouchableOpacity onPress={increment} style={styles.qBtn}>
+          <TouchableOpacity
+            onPress={increment}
+            style={[styles.qBtn, quantity >= product.Qty && { opacity: 0.5 }]}
+            // disabled={quantity >= product.Qty || isOutOfStock}
+          >
             <Text style={styles.qText}>+</Text>
           </TouchableOpacity>
         </View>
@@ -111,7 +126,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     backgroundColor: "#4CAF50",
-    paddingVertical: 13,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
   },
@@ -126,7 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 6,
   },
   qBtn: {
     paddingHorizontal: 8,

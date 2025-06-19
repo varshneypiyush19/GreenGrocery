@@ -61,7 +61,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import Video from "react-native-video";
+// import Video from "react-native-video";
+import { Video } from "expo-video";
+
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 const { width } = Dimensions.get("window");
@@ -102,10 +104,9 @@ export default function MixedCarousel() {
             source={{ uri: item.url }}
             style={styles.media}
             resizeMode="cover"
-            repeat
-            muted
-            controls={false}
-            paused={false}
+            isLooping
+            isMuted
+            shouldPlay
           />
         ) : (
           <Image source={{ uri: item.url }} style={styles.media} />

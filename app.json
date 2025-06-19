@@ -4,11 +4,11 @@
     "slug": "GreenGrocery",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logo.png",
+    "icon": "./assets/LogoIcon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/Logo.png",
+      "image": "./assets/LogoIcon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "splash": {
-        "image": "./assets/Logo.png",
+        "image": "./assets/LogoIcon.png",
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
       }
@@ -38,19 +38,22 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Logo.png",
+        "foregroundImage": "./assets/LogoIcon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": false,
       "package": "com.varshneypiyush19.GreenGrocery",
       "splash": {
-        "image": "./assets/Logo.png",
+        "image": "./assets/LogoIcon.png",
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/Logo.png"
-    }
+      "favicon": "./assets/LogoIcon.png"
+    },
+    "plugins": [
+      "expo-video"
+    ]
   }
 }

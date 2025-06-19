@@ -33,19 +33,19 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   image: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderRadius: 8,
     marginBottom: 8,
     resizeMode: "cover",
   },
   name: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     marginBottom: 4,
   },
   price: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#4CAF50",
     fontWeight: "600",
     marginBottom: 4,

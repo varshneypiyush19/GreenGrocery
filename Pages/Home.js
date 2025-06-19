@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
-    paddingVertical: 30,
-    paddingBottom: 10,
+    // paddingVertical: 30,
+    paddingTop: 20,
     justifyContent: "space-between",
   },
   categoryItem: {

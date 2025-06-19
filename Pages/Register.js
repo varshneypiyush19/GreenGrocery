@@ -7,16 +7,16 @@ import {
   StyleSheet,
   Alert,
   Image,
-  KeyboardAvoidingView,
   Platform,
-  ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import { StatusBar } from "expo-status-bar";
 import LayoutNoFooter from "../components/LayoutNoFooter";
-
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 // Color constants
 const COLORS = {
   primary: "#9DC462",
@@ -37,6 +37,8 @@ const RegisterScreen = ({ navigation }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState("");
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,7 +57,15 @@ const RegisterScreen = ({ navigation }) => {
 
     // Validate inputs
     let isValid = true;
+    if (!name.trim()) {
+      Alert.alert("Name is required");
+      isValid = false;
+    }
 
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      Alert.alert("Please enter a valid 10-digit phone number");
+      isValid = false;
+    }
     if (!email) {
       setEmailError("Email is required");
       isValid = false;
@@ -84,7 +94,20 @@ const RegisterScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        phoneNumber,
+        email,
+        createdAt: new Date().toISOString(),
+      });
       Alert.alert(
         "Registration Successful!",
         "Your account has been created successfully.",
@@ -134,7 +157,7 @@ const RegisterScreen = ({ navigation }) => {
   return (
     <LayoutNoFooter>
       {/* Logo placeholder */}
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.logoContainer}>
           <Image
             source={require("../assets/Logo.png")} // Update with your logo path
@@ -146,6 +169,32 @@ const RegisterScreen = ({ navigation }) => {
         <Text style={styles.title}>Create Account</Text>
 
         {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.input]}
+            placeholder="Full Name"
+            placeholderTextColor={COLORS.placeholder}
+            value={name}
+            onChangeText={(text) => {
+              setName(text);
+            }}
+            editable={!loading}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.input]}
+            placeholder="Phone Number (10 digits)"
+            placeholderTextColor={COLORS.placeholder}
+            keyboardType="phone-pad"
+            value={phoneNumber}
+            onChangeText={(text) => {
+              setPhoneNumber(text.replace(/[^0-9]/g, ""));
+            }}
+            editable={!loading}
+          />
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.input, emailError ? styles.inputError : null]}
@@ -216,7 +265,14 @@ const RegisterScreen = ({ navigation }) => {
               : null,
           ]}
           onPress={handleRegister}
-          disabled={loading || !email || !password || !confirmPassword}
+          disabled={
+            loading ||
+            !email ||
+            !password ||
+            !confirmPassword ||
+            !name ||
+            !phoneNumber
+          }
           activeOpacity={0.8}
         >
           {loading ? (
@@ -244,7 +300,7 @@ const RegisterScreen = ({ navigation }) => {
             <Text style={styles.loginLink}>Log In</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </LayoutNoFooter>
   );
 };

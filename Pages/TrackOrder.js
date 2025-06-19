@@ -44,6 +44,7 @@ export default function OrdersScreen() {
     Delivered: 2,
     Rejected: 3,
     cancelled: 3,
+    dispatched: 1.5,
   };
 
   // Status display configuration
@@ -83,6 +84,12 @@ export default function OrdersScreen() {
       color: "#D0021B",
       bgColor: "#FFF0F0",
       icon: "❌",
+    },
+    dispatched: {
+      displayName: "Dispatched",
+      color: "#FFB800",
+      bgColor: "#FFFBEA",
+      icon: "🚚",
     },
   };
 
@@ -142,6 +149,7 @@ export default function OrdersScreen() {
       "Pending",
       "approval pending",
       "Received",
+      "dispatched",
       "Delivered",
       "Rejected",
       "cancelled",

@@ -54,11 +54,16 @@ export default function ProductDetailsScreen() {
               </Text>
             ) : null}
 
-            {product.Qty ? (
+            {/* {product.Qty ? (
               <Text style={styles.stock}>Qty: {product.Qty}/Kg (In Stock)</Text>
-            ) : null}
+            ) : null} */}
+            {!product.outOfStock ? (
+              <Text style={styles.stock}>Qty: {product.Qty}/Kg (In Stock)</Text>
+            ) : (
+              <Text style={[styles.stock, { color: "red" }]}>Out of Stock</Text>
+            )}
 
-            <AddToCartButton product={product} />
+            <AddToCartButton product={product} disabled={product.outofStock} />
           </View>
         </View>
       </ScrollView>
