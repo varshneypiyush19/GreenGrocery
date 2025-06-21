@@ -125,20 +125,23 @@ export default function MixedCarousel() {
   if (carouselData.length === 0) return null;
   return (
     <Carousel
+      loop
       width={width}
       height={250}
       data={carouselData}
+      autoPlay
+      autoPlayInterval={1000}
+      scrollAnimationDuration={800}
+      mode="horizontal" // ✅ This ensures smooth horizontal animation
       renderItem={renderItem}
-      sliderWidth={width}
-      itemWidth={width}
-      loop
-      autoplay
     />
   );
 }
 
 const styles = StyleSheet.create({
   slide: {
+    paddingBottom: 30,
+    paddingHorizontal: 20,
     width: width,
     height: 250,
     borderRadius: 12,

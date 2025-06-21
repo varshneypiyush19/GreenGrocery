@@ -119,7 +119,12 @@ export default function HomeScreen({ navigation }) {
             </View>
           </>
         )}
-        <MixedCarousel />
+        <View>
+          <Text style={[styles.sectionTitle, { marginTop: 20 }]}>
+            Deals of the Day
+          </Text>
+          <MixedCarousel />
+        </View>
         {/* Product Section */}
         {searchQuery.trim().length > 0 && (
           <>
