@@ -46,7 +46,7 @@ export default function ProductDetailsScreen() {
           {/* Product Info */}
           <View style={styles.detailsContainer}>
             <Text style={styles.name}>{product.productName}</Text>
-            <Text style={styles.price}>₹{product.price}/Kg</Text>
+            <Text style={styles.price}>₹{product.price}</Text>
 
             {product.description ? (
               <Text style={styles.description}>
@@ -54,11 +54,12 @@ export default function ProductDetailsScreen() {
               </Text>
             ) : null}
 
-            {/* {product.Qty ? (
-              <Text style={styles.stock}>Qty: {product.Qty}/Kg (In Stock)</Text>
-            ) : null} */}
-            {!product.outOfStock ? (
-              <Text style={styles.stock}>Qty: {product.Qty}/Kg (In Stock)</Text>
+            {!product.outOfStock || product.qtyDescription ? (
+              <View>
+                <Text style={styles.stock}>Qty: {product.Qty} (In Stock)</Text>
+
+                <Text style={styles.stock}>{product.qtyDescription}</Text>
+              </View>
             ) : (
               <Text style={[styles.stock, { color: "red" }]}>Out of Stock</Text>
             )}
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   },
   imageCarousel: {
     width: "100%",
-    height: 400,
+    height: 350,
   },
 
   image: {

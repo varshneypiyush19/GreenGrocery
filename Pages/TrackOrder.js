@@ -13,14 +13,16 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import { app } from "../firebaseConfig";
 import Layout from "../components/Layout";
-
+import { useAuth } from "../context/AuthContext";
+// import useAuth from "../utils/useAuth";
+// import { getAuth } from "firebase/auth";
+// const auth = getAuth(app);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 export default function OrdersScreen() {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -95,12 +97,11 @@ export default function OrdersScreen() {
 
   const fetchOrders = async () => {
     try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) return;
+      if (!user) return;
 
       const q = query(
         collection(db, "orders"),
-        where("userId", "==", currentUser.uid)
+        where("user_id", "==", user.id)
       );
       const querySnapshot = await getDocs(q);
       const fetchedOrders = querySnapshot.docs.map((doc) => {
@@ -113,7 +114,6 @@ export default function OrdersScreen() {
           normalizedStatus: data.status || data.orderStatus || "Pending",
         };
       });
-
       // Group orders by status
       const groupedOrders = groupOrdersByStatus(fetchedOrders);
       setOrders(groupedOrders);
@@ -149,7 +149,7 @@ export default function OrdersScreen() {
       "Pending",
       "approval pending",
       "Received",
-      "dispatched",
+      "Dispatched",
       "Delivered",
       "Rejected",
       "cancelled",
@@ -178,8 +178,8 @@ export default function OrdersScreen() {
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    if (user) fetchOrders();
+  }, [user]);
 
   const renderItem = ({ item }) => {
     if (item.type === "header") {
@@ -230,7 +230,7 @@ export default function OrdersScreen() {
 
         <View style={styles.orderFooter}>
           <Text style={styles.total}>Total: ₹{item.total}</Text>
-          <Text style={styles.payment}>Payment: {item.paymentMethod}</Text>
+          <Text style={styles.payment}>Payment: {item.payment_method}</Text>
         </View>
       </View>
     );

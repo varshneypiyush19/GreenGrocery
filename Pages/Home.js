@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -14,6 +15,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ItemCard from "../components/ItemCard";
 import Layout from "../components/Layout";
 import MixedCarousel from "../components/MixedCarousel";
+import Carousel from "react-native-reanimated-carousel";
+import CarouselItemCard from "../components/CarouselItemCard";
+
+const { width } = Dimensions.get("window");
+// const ITEM_WIDTH = (width - 32) / 2; // 2 items with total 32px horizontal padding (16 + 16)
+const ITEM_WIDTH = (width - 16 * 2 - 8) / 2;
 
 export default function HomeScreen({ navigation }) {
   const [products, setProducts] = useState([]);
@@ -58,7 +65,18 @@ export default function HomeScreen({ navigation }) {
       item.productName &&
       item.productName.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const dealsOfTheDayProducts = filteredProducts.filter(
+    (item) => item.dealsoftheday === true
+  );
+  const chunkArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  };
 
+  const groupedDeals = chunkArray(dealsOfTheDayProducts, 2);
   return (
     <Layout>
       <ScrollView style={styles.container}>
@@ -82,7 +100,6 @@ export default function HomeScreen({ navigation }) {
             </TouchableOpacity>
           )}
         </View>
-
         {/* Fresh & Dairy Section (Only if no search) */}
         {searchQuery.trim().length === 0 && (
           <>
@@ -119,12 +136,50 @@ export default function HomeScreen({ navigation }) {
             </View>
           </>
         )}
-        <View>
+        {/* <View>
           <Text style={[styles.sectionTitle, { marginTop: 20 }]}>
             Deals of the Day
           </Text>
           <MixedCarousel />
-        </View>
+          
+        </View> */}
+        {searchQuery.length == 0 && (
+          <View style={{ marginBottom: 40 }}>
+            <Text style={[styles.sectionTitle, { marginTop: 20 }]}>
+              Deals of the Day
+            </Text>
+            <Carousel
+              loop
+              width={width}
+              height={300}
+              data={groupedDeals}
+              autoPlay
+              autoPlayInterval={1000}
+              scrollAnimationDuration={800}
+              mode="horizontal" // ✅ This ensures smooth horizontal animation
+              renderItem={({ item }) => (
+                <View style={styles.slide}>
+                  {item.map((product) => (
+                    <View key={product.id} style={styles.CarouselProduct}>
+                      <CarouselItemCard product={product} />
+                    </View>
+                  ))}
+                </View>
+              )}
+            />
+          </View>
+        )}
+        {/* <FlatList
+          horizontal
+          data={dealsOfTheDayProducts}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.productWrapper}>
+              <ItemCard product={item} />
+            </View>
+          )}
+          showsHorizontalScrollIndicator={false}
+        /> */}
         {/* Product Section */}
         {searchQuery.trim().length > 0 && (
           <>
@@ -225,5 +280,14 @@ const styles = StyleSheet.create({
   productWrapper: {
     width: "48%",
     marginBottom: 12,
+  },
+  slide: {
+    flexDirection: "row",
+  },
+  CarouselProduct: {
+    width: (width - 20) / 2, // 2 items with padding/margin
+    marginHorizontal: 4,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
 });
