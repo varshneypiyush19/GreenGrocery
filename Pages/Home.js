@@ -14,7 +14,6 @@ import { db } from "../firebaseConfig";
 import Icon from "react-native-vector-icons/Ionicons";
 import ItemCard from "../components/ItemCard";
 import Layout from "../components/Layout";
-import MixedCarousel from "../components/MixedCarousel";
 import Carousel from "react-native-reanimated-carousel";
 import CarouselItemCard from "../components/CarouselItemCard";
 
@@ -141,7 +140,6 @@ export default function HomeScreen({ navigation }) {
             Deals of the Day
           </Text>
           <MixedCarousel />
-          
         </View> */}
         {searchQuery.length == 0 && (
           <View style={{ marginBottom: 40 }}>

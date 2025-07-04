@@ -37,17 +37,16 @@ export default function OrdersScreen() {
       minute: "2-digit",
     });
   };
-
   // Updated status order with proper mapping
-  const statusOrder = {
-    Pending: 0,
-    "approval pending": 0,
-    Received: 1,
-    Delivered: 2,
-    Rejected: 3,
-    cancelled: 3,
-    dispatched: 1.5,
-  };
+  // const statusOrder = {
+  //   Pending: 0,
+  //   approved: 0,
+  //   Received: 1,
+  //   Delivered: 2,
+  //   Rejected: 3,
+  //   cancelled: 3,
+  //   dispatched: 1.5,
+  // };
 
   // Status display configuration
   const statusConfig = {
@@ -57,12 +56,13 @@ export default function OrdersScreen() {
       bgColor: "#FFF4F2",
       icon: "⏳",
     },
-    "approval pending": {
-      displayName: "Approval Pending",
+    Approved: {
+      displayName: "Approved",
       color: "#FF6B35",
-      bgColor: "#FFF4F2",
-      icon: "⏳",
+      bgColor: "#F0F7FF",
+      icon: "📦",
     },
+
     Received: {
       displayName: "Order Received",
       color: "#4A90E2",
@@ -81,17 +81,60 @@ export default function OrdersScreen() {
       bgColor: "#FFF0F0",
       icon: "❌",
     },
+    Cancelled: {
+      displayName: "Cancelled",
+      color: "#D0021B",
+      bgColor: "#FFF0F0",
+      icon: "❌",
+    },
+    Dispatched: {
+      displayName: "Dispatched",
+      color: "#FFB800",
+      bgColor: "#FFFBEA",
+      icon: "🚚",
+    },
+
+    dispatched: {
+      displayName: "Dispatched",
+      color: "#FFB800",
+      bgColor: "#FFFBEA",
+      icon: "🚚",
+    },
+    rejected: {
+      displayName: "Cancelled",
+      color: "#D0021B",
+      bgColor: "#FFF0F0",
+      icon: "❌",
+    },
     cancelled: {
       displayName: "Cancelled",
       color: "#D0021B",
       bgColor: "#FFF0F0",
       icon: "❌",
     },
-    dispatched: {
-      displayName: "Dispatched",
-      color: "#FFB800",
-      bgColor: "#FFFBEA",
-      icon: "🚚",
+    delivered: {
+      displayName: "Delivered",
+      color: "#7ED321",
+      bgColor: "#F4FFF0",
+      icon: "✅",
+    },
+    received: {
+      displayName: "Order Received",
+      color: "#4A90E2",
+      bgColor: "#F0F7FF",
+      icon: "📦",
+    },
+    approved: {
+      displayName: "Approved",
+      color: "#FF6B35",
+      bgColor: "#F0F7FF",
+      icon: "📦",
+    },
+    pending: {
+      displayName: "Approval Pending",
+      color: "#FF6B35",
+      bgColor: "#FFF4F2",
+      icon: "⏳",
     },
   };
 
@@ -109,13 +152,15 @@ export default function OrdersScreen() {
         return {
           id: doc.id,
           ...data,
-          createdAt: data.createdAt?.toDate?.(),
+          createdAt: data.created_at?.toDate?.(),
           // Normalize status field - check both 'status' and 'orderStatus'
-          normalizedStatus: data.status || data.orderStatus || "Pending",
+          normalizedStatus: data.status || data.orderStatus,
         };
       });
+      // console.log("Fetched orders:", fetchedOrders);
       // Group orders by status
       const groupedOrders = groupOrdersByStatus(fetchedOrders);
+      // console.log("Fetched and grouped orders:", groupedOrders);
       setOrders(groupedOrders);
     } catch (err) {
       console.error("Failed to fetch orders:", err);
@@ -127,7 +172,9 @@ export default function OrdersScreen() {
   const groupOrdersByStatus = (orders) => {
     // Group orders by status
     const grouped = orders.reduce((acc, order) => {
-      const status = order.normalizedStatus;
+      // const status = order.normalizedStatus;
+      const status = order.normalizedStatus?.toLowerCase();
+
       if (!acc[status]) {
         acc[status] = [];
       }
@@ -145,14 +192,31 @@ export default function OrdersScreen() {
     });
 
     // Convert to flat array with headers in correct order
-    const statusPriority = [
-      "Pending",
-      "approval pending",
-      "Received",
-      "Dispatched",
-      "Delivered",
-      "Rejected",
+    // const statusPriority = [
+    //   "Pending",
+    //   "approval pending",
+    //   "Received",
+    //   "Dispatched",
+    //   "Delivered",
+    //   "Rejected",
+    //   "cancelled",
+    // ];
+    const knownStatuses = [
+      "pending",
+      // "approval pending",
+      "approved",
+      "received",
+      "dispatched",
+      "delivered",
+      "rejected",
       "cancelled",
+    ];
+    const statusPriority = [
+      ...knownStatuses,
+      // add any unknown statuses dynamically:
+      ...Object.keys(grouped).filter(
+        (status) => !knownStatuses.includes(status)
+      ),
     ];
     const flatArray = [];
 
@@ -202,7 +266,7 @@ export default function OrdersScreen() {
     return (
       <View style={styles.orderContainer}>
         <View style={styles.orderHeader}>
-          <Text style={styles.dateText}>📅 {formatDate(item.createdAt)}</Text>
+          <Text style={styles.dateText}>📅 {formatDate(item.created_at)}</Text>
           <View
             style={[styles.statusBadge, { backgroundColor: config.bgColor }]}
           >

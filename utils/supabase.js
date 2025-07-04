@@ -1,14 +1,14 @@
 import "react-native-url-polyfill/auto"; // important for RN env
 import { createClient } from "@supabase/supabase-js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import Constants from "expo-constants";
 // const ExpoAsyncStorageAdapter = {
 //   getItem: (key) => AsyncStorage.getItem(key),
 //   setItem: (key, value) => AsyncStorage.setItem(key, value),
 //   removeItem: (key) => AsyncStorage.removeItem(key),
 // };
-const supabaseUrl = process.env.SUPABASEURL;
-const supabaseAnonKey = process.env.SUPABASEANONKEY;
+const supabaseUrl = Constants.expoConfig.extra.SUPABASEURL;
+const supabaseAnonKey = Constants.expoConfig.extra.SUPABASEANONKEY;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   // storage: ExpoAsyncStorageAdapter,
   auth: {

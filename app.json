@@ -2,7 +2,7 @@
   "expo": {
     "name": "GreenGrocery",
     "slug": "GreenGrocery",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/LogoIcon.png",
     "userInterfaceStyle": "light",
@@ -25,6 +25,8 @@
       }
     },
     "extra": {
+      "SUPABASEURL": "https://xmikunzmoqsrybnogxom.supabase.co",
+      "SUPABASEANONKEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtaWt1bnptb3Fzcnlibm9neG9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MDYwMzAsImV4cCI6MjA2NjE4MjAzMH0.7qHnAbXdA3rN2jLoWcJd362twebZTMFoQvuN5pZT0bI",
       "APIKEY": "AIzaSyDU-qWEjVmzt1-5T6COTZ1busoTfQ-9CgY",
       "AUTHDOMAIN": "greengrocery-b1f8b.firebaseapp.com",
       "PROJECTID": "greengrocery-b1f8b",
@@ -51,9 +53,6 @@
     },
     "web": {
       "favicon": "./assets/LogoIcon.png"
-    },
-    "plugins": [
-      "expo-video"
-    ]
+    }
   }
 }

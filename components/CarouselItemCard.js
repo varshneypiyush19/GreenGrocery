@@ -1,6 +1,5 @@
-import { Text, Image, TouchableOpacity, StyleSheet, View } from "react-native";
+import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import AddToCartButton from "./AddToCartButton";
 
 export default function CarouselItemCard({ product }) {
   const navigation = useNavigation();

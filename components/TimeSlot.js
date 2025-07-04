@@ -25,7 +25,7 @@ export default function TimeSlot({
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Select Delivery Time Slot</Text>
 
-          {["today", "tomorrow"].map((day) => (
+          {["today"].map((day) => (
             <View key={day} style={{ marginBottom: 12, width: "100%" }}>
               <Text style={{ fontWeight: "bold", marginBottom: 4 }}>
                 {day === "today" ? "Today" : "Tomorrow"}

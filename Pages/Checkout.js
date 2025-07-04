@@ -831,6 +831,7 @@ export default function CheckoutScreen() {
     "14:00 pm to 16:00 pm",
     "16:00 pm to 18:00 pm",
     "18:00 pm to 20:00 pm",
+    "20:00 pm to 22:00 pm",
   ];
 
   const isSlotValid = (slot, dateType) => {
@@ -920,7 +921,7 @@ export default function CheckoutScreen() {
         status: paymentMethod === "Cash" ? "Received" : "Pending",
         created_at: new Date().toISOString(),
       };
-      // console.log("Placing order:", order);
+      console.log("Placing order:", order);
       await addDoc(collection(db, "orders"), order);
 
       // const { error } = await supabase.from("Orders").insert(order);
@@ -937,6 +938,35 @@ export default function CheckoutScreen() {
     }
   };
 
+  //   const placeOrder = async () => {
+  //     try {
+  //       const currentUser = auth.currentUser;
+  //       if (!currentUser) {
+  //         Alert.alert("Error", "Please login first");
+  //         return;
+  //       }
+
+  //       const order = {
+  //         userId: currentUser.uid,
+  //         items: cartItems,
+  //         total: getTotal(),
+  //         paymentMethod,
+  //         deliverySlot: `${selectedTimeSlot.day} ${selectedTimeSlot.slot}`,
+  //         deliveryAddress: userInfo?.address || "", // ✅ Added delivery address
+  //         status: paymentMethod === "Cash" ? "Received" : "Pending",
+  //         createdAt: Timestamp.now(),
+  //       };
+
+  //       await addDoc(collection(db, "orders"), order);
+  //       clearCart();
+  //       setShowQR(false);
+  //       setPaymentSelectionVisible(false);
+  //       navigation.navigate("OrderConfirmation");
+  //     } catch (error) {
+  //       Alert.alert("Error", "Failed to place order. Please try again.");
+  //       console.error("Firebase Order Error:", error);
+  //     }
+  //   };
   if (loading) {
     return (
       <LayoutNoFooter>
