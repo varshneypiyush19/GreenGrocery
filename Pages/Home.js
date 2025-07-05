@@ -112,7 +112,9 @@ export default function HomeScreen({ navigation }) {
                     key={cat.id}
                     style={styles.categoryItem}
                     onPress={() =>
-                      navigation.navigate("Category", { category: cat })
+                      navigation.navigate("Category", {
+                        category: cat,
+                      })
                     }
                   >
                     <View style={styles.iconWrapper}>

@@ -87,14 +87,14 @@ export default function OrdersScreen() {
       bgColor: "#FFF0F0",
       icon: "❌",
     },
-    Dispatched: {
+    Dispatch: {
       displayName: "Dispatched",
       color: "#FFB800",
       bgColor: "#FFFBEA",
       icon: "🚚",
     },
 
-    dispatched: {
+    dispatch: {
       displayName: "Dispatched",
       color: "#FFB800",
       bgColor: "#FFFBEA",
@@ -206,7 +206,7 @@ export default function OrdersScreen() {
       // "approval pending",
       "approved",
       "received",
-      "dispatched",
+      "dispatch",
       "delivered",
       "rejected",
       "cancelled",
