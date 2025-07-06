@@ -34,7 +34,8 @@ export default function CartScreen() {
                   <View style={styles.details}>
                     <Text style={styles.title}>{item.product.productName}</Text>
                     <Text style={styles.text}>
-                      Qty: {item.quantity} x {product.qtyDescription}
+                      Qty: {item.quantity} x{" "}
+                      {item.product.qtyDescription || "unit"}
                     </Text>
                     <Text style={styles.text}>
                       Price: ₹{item.product.price * item.quantity}

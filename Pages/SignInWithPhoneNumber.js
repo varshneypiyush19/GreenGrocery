@@ -1440,6 +1440,22 @@ const PhoneSignInScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
+      const testNumber = "+919876543210";
+
+      if ("+91" + phoneNumber === testNumber) {
+        // static OTP flow
+        if (otp === "123456") {
+          Alert.alert(
+            "Login Successful (Test Number)",
+            "Logged in with static OTP",
+            [{ text: "Continue", onPress: () => navigation.replace("Home") }]
+          );
+          setLoading(false);
+          return; // skip normal Supabase verify
+        } else {
+          throw new Error("Invalid static OTP");
+        }
+      }
       const { data, error } = await supabase.auth.verifyOtp({
         phone: "+91" + phoneNumber,
         token: otp,
