@@ -102,7 +102,7 @@ export default function HomeScreen({ navigation }) {
         {/* Fresh & Dairy Section (Only if no search) */}
         {searchQuery.trim().length === 0 && (
           <>
-            <Text style={styles.sectionTitle}>Fresh & Dairy</Text>
+            <Text style={styles.sectionTitle}>Farm Fresh</Text>
             <View style={styles.categoryGrid}>
               {loading ? (
                 <Text style={{ marginLeft: 16 }}>Loading categories...</Text>

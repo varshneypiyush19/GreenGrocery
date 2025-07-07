@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Footer from "./Footer";
 import FloatingHelpButton from "./HelpButton";
+import FloatingCartButton from "./FloatingCartButton";
 export default function Layout({ children }) {
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -19,6 +20,7 @@ export default function Layout({ children }) {
           style={styles.content}
         >
           {children}
+          <FloatingCartButton />
         </KeyboardAvoidingView>
 
         <View style={styles.footerWrapper}>

@@ -239,7 +239,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     marginLeft: 25,
-    // marginVertical: 10,
   },
   productGrid: {
     flexDirection: "row",

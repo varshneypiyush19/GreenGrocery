@@ -56,7 +56,7 @@ export default function ProductDetailsScreen() {
 
             {!product.outOfStock || product.qtyDescription ? (
               <View>
-                <Text style={styles.stock}>Qty: {product.Qty} (In Stock)</Text>
+                {/* <Text style={styles.stock}>Qty: {product.Qty} (In Stock)</Text> */}
 
                 <Text style={styles.stock}>{product.qtyDescription}</Text>
               </View>

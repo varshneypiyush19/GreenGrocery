@@ -3,7 +3,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
 
-export default function CartIconWithBadge() {
+export default function CartIconWithBadge({ color }) {
   const navigation = useNavigation();
   const { cartItems } = useCart();
 
@@ -12,7 +12,7 @@ export default function CartIconWithBadge() {
   return (
     <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
       <View style={{ padding: 5 }}>
-        <Icon name="cart" size={26} color="#888" />
+        <Icon name="cart" size={26} color={color ? "#fff" : "#888"} />
         {totalItems > 0 && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{totalItems}</Text>

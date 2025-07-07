@@ -1376,6 +1376,9 @@ import {
 } from "react-native";
 import { supabase } from "../utils/supabase";
 import LayoutNoFooter from "../components/LayoutNoFooter";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { app as firebaseApp } from "../firebaseConfig";
+const db = getFirestore(firebaseApp);
 
 const COLORS = {
   primary: "#9DC462",
@@ -1487,6 +1490,18 @@ const PhoneSignInScreen = ({ navigation }) => {
           },
         ]);
         if (insertError) throw insertError;
+        try {
+          await setDoc(doc(db, "users", user.id), {
+            id: user.id,
+            name,
+            phone: "+91" + phoneNumber,
+            address: "",
+            created_at: new Date(),
+          });
+          console.log("User added to Firestore successfully.");
+        } catch (firebaseError) {
+          console.error("Failed to add user to Firestore:", firebaseError);
+        }
       }
 
       Alert.alert("Login Successful", "You are now logged in", [

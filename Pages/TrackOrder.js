@@ -12,6 +12,7 @@ import {
   query,
   where,
   getDocs,
+  onSnapshot,
 } from "firebase/firestore";
 import { app } from "../firebaseConfig";
 import Layout from "../components/Layout";
@@ -138,36 +139,37 @@ export default function OrdersScreen() {
     },
   };
 
-  const fetchOrders = async () => {
-    try {
-      if (!user) return;
+  useEffect(() => {
+    // const fetchOrders = async () => {
+    // try {
+    if (!user) return;
 
-      const q = query(
-        collection(db, "orders"),
-        where("user_id", "==", user.id)
-      );
-      const querySnapshot = await getDocs(q);
+    const q = query(collection(db, "orders"), where("user_id", "==", user.id));
+    // const querySnapshot = await getDocs(q);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const fetchedOrders = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           id: doc.id,
           ...data,
           createdAt: data.created_at?.toDate?.(),
-          // Normalize status field - check both 'status' and 'orderStatus'
           normalizedStatus: data.status || data.orderStatus,
         };
       });
-      // console.log("Fetched orders:", fetchedOrders);
-      // Group orders by status
       const groupedOrders = groupOrdersByStatus(fetchedOrders);
-      // console.log("Fetched and grouped orders:", groupedOrders);
       setOrders(groupedOrders);
-    } catch (err) {
-      console.error("Failed to fetch orders:", err);
-    } finally {
       setLoading(false);
-    }
-  };
+    });
+    // } catch (err) {
+    //   console.error("Failed to fetch orders:", err);
+    // } finally {
+    //   setLoading(false);
+    // }
+    // };
+    return () => unsubscribe(); // cleanup listener on unmount
+
+    // if (user) fetchOrders();
+  }, [user]);
 
   const groupOrdersByStatus = (orders) => {
     // Group orders by status
@@ -240,10 +242,6 @@ export default function OrdersScreen() {
 
     return flatArray;
   };
-
-  useEffect(() => {
-    if (user) fetchOrders();
-  }, [user]);
 
   const renderItem = ({ item }) => {
     if (item.type === "header") {
