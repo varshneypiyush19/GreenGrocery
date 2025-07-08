@@ -75,6 +75,8 @@ export default function ProductDetailsScreen() {
 const styles = StyleSheet.create({
   scrollContainer: {
     padding: 16,
+    flex: 1,
+    backgroundColor: "#9DC462",
   },
   loadingContainer: {
     flex: 1,

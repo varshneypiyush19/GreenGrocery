@@ -122,73 +122,80 @@ export default function CategoryScreen({ route }) {
 
   return (
     <Layout>
-      <View style={styles.searchContainer}>
-        <Icon name="search-outline" size={20} color="#888" />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search your Grocery here"
-          value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)}
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery("")}>
-            <Icon
-              name="close-outline"
-              size={20}
-              color="#888"
-              style={{ marginLeft: 8 }}
-            />
-          </TouchableOpacity>
-        )}
-      </View>
-      {searchQuery.trim().length > 0 && (
-        <>
-          <Text style={styles.sectionTitle}>"Search Results"</Text>
-          <ScrollView style={styles.container1}>
-            <View style={styles.productGrid}>
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((item) => (
-                  <View key={item.id} style={styles.productWrapper1}>
-                    <ItemCard product={item} />
-                  </View>
-                ))
-              ) : (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    paddingTop: 100,
-                  }}
-                >
-                  <Text
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#9DC462",
+        }}
+      >
+        <View style={styles.searchContainer}>
+          <Icon name="search-outline" size={20} color="#888" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search your Grocery here"
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery("")}>
+              <Icon
+                name="close-outline"
+                size={20}
+                color="#888"
+                style={{ marginLeft: 8 }}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        {searchQuery.trim().length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>"Search Results"</Text>
+            <ScrollView style={styles.container1}>
+              <View style={styles.productGrid}>
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((item) => (
+                    <View key={item.id} style={styles.productWrapper1}>
+                      <ItemCard product={item} />
+                    </View>
+                  ))
+                ) : (
+                  <View
                     style={{
-                      marginLeft: 16,
-                      fontStyle: "italic",
-                      fontWeight: "bold",
-                      fontSize: 20,
+                      flex: 1,
+                      alignItems: "center",
+                      paddingTop: 100,
                     }}
                   >
-                    No products found.
-                  </Text>
-                </View>
-              )}
-            </View>
-          </ScrollView>
-        </>
-      )}
-      {searchQuery.length == 0 && (
-        <View style={styles.container}>
-          <Text style={styles.heading}>{category.name} Products</Text>
-          <FlashList
-            data={products}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            estimatedItemSize={200}
-            numColumns={2}
-            contentContainerStyle={styles.listContainer}
-          />
-        </View>
-      )}
+                    <Text
+                      style={{
+                        marginLeft: 16,
+                        fontStyle: "italic",
+                        fontWeight: "bold",
+                        fontSize: 20,
+                      }}
+                    >
+                      No products found.
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+          </>
+        )}
+        {searchQuery.length == 0 && (
+          <View style={styles.container}>
+            <Text style={styles.heading}>{category.name} Products</Text>
+            <FlashList
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+              estimatedItemSize={200}
+              numColumns={2}
+              contentContainerStyle={styles.listContainer}
+            />
+          </View>
+        )}
+      </View>
     </Layout>
   );
 }
