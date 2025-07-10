@@ -102,14 +102,18 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+// import { MaterialIcons } from "@expo/vector-icons";
+import * as Linking from "expo-linking"; // required to open dialer
+
 import Icon from "react-native-vector-icons/Ionicons";
 import { BlurView } from "expo-blur"; // Optional, for iOS-style blur
-import CartIconWithBadge from "./CartIconWithBadge";
+// import CartIconWithBadge from "./CartIconWithBadge";
 
 const TABS = [
   { name: "Home", icon: "home" },
-  { name: "Cart", icon: "cart" },
+  // { name: "Cart", icon: "cart" },
   { name: "Orders", icon: "list" },
+  { name: "Help", icon: "help-circle-outline" },
   { name: "Profile", icon: "person" },
 ];
 
@@ -118,24 +122,36 @@ export default function Footer() {
   const route = useRoute();
 
   const isActive = (routeName) => route.name === routeName;
+  const PHONE_NUMBER = "012414624303";
+  const handlePress = (name) => {
+    if (name == "Help") {
+      const phoneURL = Platform.select({
+        ios: `telprompt:${PHONE_NUMBER}`,
+        android: `tel:${PHONE_NUMBER}`,
+      });
 
+      Linking.openURL(phoneURL);
+    } else {
+      navigation.navigate(name);
+    }
+  };
   const Content = (
     <View style={styles.tabContainer}>
       {TABS.map((tab) => (
         <TouchableOpacity
           key={tab.name}
-          onPress={() => navigation.navigate(tab.name)}
+          onPress={() => handlePress(tab.name)}
           style={styles.tabButton}
         >
-          {tab.name === "Cart" ? (
+          {/* {tab.name === "Cart" ? (
             <CartIconWithBadge />
           ) : (
-            <Icon
-              name={tab.icon}
-              size={26}
-              color={isActive(tab.name) ? "#1e90ff" : "#888"}
-            />
-          )}
+            )} */}
+          <Icon
+            name={tab.icon}
+            size={30}
+            color={isActive(tab.name) ? "#1e90ff" : "#888"}
+          />
           <Text
             style={[styles.tabLabel, isActive(tab.name) && styles.activeText]}
           >
@@ -143,6 +159,11 @@ export default function Footer() {
           </Text>
         </TouchableOpacity>
       ))}
+
+      {/* <TouchableOpacity style={styles.tabButton} onPress={handlePress}>
+        <MaterialIcons name="support-agent" size={24} color="#fff" />
+        <Text style={styles.label}>Help</Text>
+      </TouchableOpacity> */}
     </View>
   );
 

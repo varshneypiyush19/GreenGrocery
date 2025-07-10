@@ -67,7 +67,6 @@ import {
   StyleSheet,
 } from "react-native";
 import Footer from "./Footer";
-import FloatingHelpButton from "./HelpButton";
 import FloatingCartButton from "./FloatingCartButton";
 export default function Layout({ children }) {
   return (
@@ -90,7 +89,6 @@ export default function Layout({ children }) {
           <Footer />
         </SafeAreaView>
       </View>
-      <FloatingHelpButton />
     </SafeAreaView>
   );
 }

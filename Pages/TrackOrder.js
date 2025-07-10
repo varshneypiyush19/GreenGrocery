@@ -38,18 +38,6 @@ export default function OrdersScreen() {
       minute: "2-digit",
     });
   };
-  // Updated status order with proper mapping
-  // const statusOrder = {
-  //   Pending: 0,
-  //   approved: 0,
-  //   Received: 1,
-  //   Delivered: 2,
-  //   Rejected: 3,
-  //   cancelled: 3,
-  //   dispatched: 1.5,
-  // };
-
-  // Status display configuration
   const statusConfig = {
     Pending: {
       displayName: "Approval Pending",
@@ -140,12 +128,10 @@ export default function OrdersScreen() {
   };
 
   useEffect(() => {
-    // const fetchOrders = async () => {
-    // try {
     if (!user) return;
 
     const q = query(collection(db, "orders"), where("user_id", "==", user.id));
-    // const querySnapshot = await getDocs(q);
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const fetchedOrders = querySnapshot.docs.map((doc) => {
         const data = doc.data();
@@ -160,23 +146,21 @@ export default function OrdersScreen() {
       setOrders(groupedOrders);
       setLoading(false);
     });
-    // } catch (err) {
-    //   console.error("Failed to fetch orders:", err);
-    // } finally {
-    //   setLoading(false);
-    // }
-    // };
     return () => unsubscribe(); // cleanup listener on unmount
-
-    // if (user) fetchOrders();
   }, [user]);
 
   const groupOrdersByStatus = (orders) => {
-    // Group orders by status
-    const grouped = orders.reduce((acc, order) => {
-      // const status = order.normalizedStatus;
-      const status = order.normalizedStatus?.toLowerCase();
+    if (!orders || orders.length === 0) return [];
 
+    const recentOrders = [...orders]
+      .sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+        return dateB - dateA;
+      })
+      .slice(0, 3);
+    const grouped = orders.reduce((acc, order) => {
+      const status = order.normalizedStatus?.toLowerCase();
       if (!acc[status]) {
         acc[status] = [];
       }
@@ -193,6 +177,20 @@ export default function OrdersScreen() {
       });
     });
 
+    const flatArray = [];
+    if (recentOrders.length > 0) {
+      flatArray.push({
+        type: "header",
+        status: "recent",
+        id: "header-recent",
+      });
+      recentOrders.forEach((order) => {
+        flatArray.push({
+          ...order,
+          type: "order",
+        });
+      });
+    }
     // Convert to flat array with headers in correct order
     // const statusPriority = [
     //   "Pending",
@@ -220,7 +218,6 @@ export default function OrdersScreen() {
         (status) => !knownStatuses.includes(status)
       ),
     ];
-    const flatArray = [];
 
     statusPriority.forEach((status) => {
       if (grouped[status] && grouped[status].length > 0) {
@@ -245,7 +242,16 @@ export default function OrdersScreen() {
 
   const renderItem = ({ item }) => {
     if (item.type === "header") {
-      const config = statusConfig[item.status] || statusConfig["Pending"];
+      const config =
+        statusConfig[item.status] ||
+        (item.status === "recent"
+          ? {
+              displayName: "Recent Orders",
+              color: "#000",
+              bgColor: "#EEE",
+              icon: "🕒",
+            }
+          : statusConfig["Pending"]);
       return (
         <View
           style={[styles.statusHeader, { backgroundColor: config.bgColor }]}
@@ -326,7 +332,11 @@ export default function OrdersScreen() {
       <View style={styles.container}>
         <FlatList
           data={orders}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) =>
+            item.type === "header"
+              ? item.id
+              : `${item.id}-${item.type}-${index}`
+          }
           renderItem={renderItem}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}

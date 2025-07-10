@@ -128,7 +128,7 @@ export default function FloatingCartButton() {
 const styles = StyleSheet.create({
   button: {
     position: "absolute",
-    bottom: 90, // place above your bottom tabs
+    bottom: 80, // place above your bottom tabs
     alignSelf: "center",
     backgroundColor: "#4CAF50",
     paddingHorizontal: 24,
