@@ -120,13 +120,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   imageCarousel: {
-    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    width: width,
     height: 350,
   },
 
   image: {
     width: width,
-    height: 400,
+    height: 350,
     resizeMode: "contain",
   },
 });

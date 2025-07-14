@@ -832,7 +832,8 @@ export default function CheckoutScreen() {
     "16:00 pm to 18:00 pm",
     "18:00 pm to 20:00 pm",
     // "11:30 pm to 11:59 pm",
-    // "20:00 pm to 22:00 pm",
+    "20:00 pm to 22:00 pm",
+    "23:00 pm to 24:00 pm",
   ];
 
   const isSlotValid = (slot, dateType) => {
@@ -919,7 +920,7 @@ export default function CheckoutScreen() {
         payment_method: paymentMethod,
         delivery_slot: `${selectedTimeSlot.day} ${selectedTimeSlot.slot}`,
         address: userInfo?.address,
-        status: paymentMethod === "Cash" ? "Received" : "Pending",
+        status: "Pending",
         created_at: new Date().toISOString(),
       };
       console.log("Placing order:", order);
@@ -1037,7 +1038,9 @@ export default function CheckoutScreen() {
               />
               <View style={{ flex: 1 }}>
                 <Text>{item.product.productName}</Text>
-                <Text>Qty: {item.quantity}</Text>
+                <Text>
+                  Qty: {item.quantity} x{item.product.qtyDescription || "unit"}
+                </Text>
                 <Text>Price: ₹{item.product.price * item.quantity}</Text>
               </View>
             </View>

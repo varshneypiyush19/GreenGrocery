@@ -45,11 +45,17 @@ export default function OrdersScreen() {
       bgColor: "#FFF4F2",
       icon: "⏳",
     },
-    Approved: {
-      displayName: "Approved",
-      color: "#FF6B35",
-      bgColor: "#F0F7FF",
-      icon: "📦",
+    Dispatch: {
+      displayName: "Dispatched",
+      color: "#FFB800",
+      bgColor: "#FFFBEA",
+      icon: "🚚",
+    },
+    Delivered: {
+      displayName: "Delivered",
+      color: "#7ED321",
+      bgColor: "#F4FFF0",
+      icon: "✅",
     },
 
     Received: {
@@ -58,11 +64,12 @@ export default function OrdersScreen() {
       bgColor: "#F0F7FF",
       icon: "📦",
     },
-    Delivered: {
-      displayName: "Delivered",
-      color: "#7ED321",
-      bgColor: "#F4FFF0",
-      icon: "✅",
+
+    Approved: {
+      displayName: "Approved",
+      color: "#FF6B35",
+      bgColor: "#F0F7FF",
+      icon: "📦",
     },
     Rejected: {
       displayName: "Cancelled",
@@ -76,18 +83,24 @@ export default function OrdersScreen() {
       bgColor: "#FFF0F0",
       icon: "❌",
     },
-    Dispatch: {
-      displayName: "Dispatched",
-      color: "#FFB800",
-      bgColor: "#FFFBEA",
-      icon: "🚚",
-    },
 
+    pending: {
+      displayName: "Approval Pending",
+      color: "#FF6B35",
+      bgColor: "#FFF4F2",
+      icon: "⏳",
+    },
     dispatch: {
       displayName: "Dispatched",
       color: "#FFB800",
       bgColor: "#FFFBEA",
       icon: "🚚",
+    },
+    delivered: {
+      displayName: "Delivered",
+      color: "#7ED321",
+      bgColor: "#F4FFF0",
+      icon: "✅",
     },
     rejected: {
       displayName: "Cancelled",
@@ -101,12 +114,6 @@ export default function OrdersScreen() {
       bgColor: "#FFF0F0",
       icon: "❌",
     },
-    delivered: {
-      displayName: "Delivered",
-      color: "#7ED321",
-      bgColor: "#F4FFF0",
-      icon: "✅",
-    },
     received: {
       displayName: "Order Received",
       color: "#4A90E2",
@@ -119,12 +126,6 @@ export default function OrdersScreen() {
       bgColor: "#F0F7FF",
       icon: "📦",
     },
-    pending: {
-      displayName: "Approval Pending",
-      color: "#FF6B35",
-      bgColor: "#FFF4F2",
-      icon: "⏳",
-    },
   };
 
   useEffect(() => {
@@ -135,111 +136,135 @@ export default function OrdersScreen() {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const fetchedOrders = querySnapshot.docs.map((doc) => {
         const data = doc.data();
+        // console.log("DATA:", data); // ADD THIS LINE
+
         return {
           id: doc.id,
           ...data,
-          createdAt: data.created_at?.toDate?.(),
+          createdAt: data.created_at ? new Date(data.created_at) : new Date(0),
           normalizedStatus: data.status || data.orderStatus,
         };
       });
       const groupedOrders = groupOrdersByStatus(fetchedOrders);
       setOrders(groupedOrders);
+      // console.log(groupedOrders);
       setLoading(false);
     });
     return () => unsubscribe(); // cleanup listener on unmount
   }, [user]);
 
+  // const groupOrdersByStatus = (orders) => {
+  //   if (!orders || orders.length === 0) return [];
+
+  //   const recentOrders = [...orders]
+  //     .sort((a, b) => {
+  //       const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+  //       const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+  //       return dateB - dateA;
+  //     })
+  //     .slice(0, 3);
+  //   const grouped = orders.reduce((acc, order) => {
+  //     const status = order.normalizedStatus?.toLowerCase();
+  //     if (!acc[status]) {
+  //       acc[status] = [];
+  //     }
+  //     acc[status].push(order);
+  //     return acc;
+  //   }, {});
+
+  //   // Sort orders within each group by date (newest first)
+  //   Object.keys(grouped).forEach((status) => {
+  //     grouped[status].sort((a, b) => {
+  //       const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+  //       const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+  //       return dateB - dateA;
+  //     });
+  //   });
+
+  //   const flatArray = [];
+  //   if (recentOrders.length > 0) {
+  //     flatArray.push({
+  //       type: "header",
+  //       status: "recent",
+  //       id: "header-recent",
+  //     });
+  //     recentOrders.forEach((order) => {
+  //       flatArray.push({
+  //         ...order,
+  //         type: "order",
+  //       });
+  //     });
+  //   }
+  //   // Convert to flat array with headers in correct order
+  //   // const statusPriority = [
+  //   //   "Pending",
+  //   //   "approval pending",
+  //   //   "Received",
+  //   //   "Dispatched",
+  //   //   "Delivered",
+  //   //   "Rejected",
+  //   //   "cancelled",
+  //   // ];
+  //   const knownStatuses = [
+  //     "pending",
+  //     "dispatch",
+  //     "delivered",
+  //     "received",
+  //     "approved",
+  //     "rejected",
+  //     "cancelled",
+  //   ];
+  //   const statusPriority = [
+  //     ...knownStatuses,
+  //     // add any unknown statuses dynamically:
+  //     ...Object.keys(grouped).filter(
+  //       (status) => !knownStatuses.includes(status)
+  //     ),
+  //   ];
+
+  //   statusPriority.forEach((status) => {
+  //     if (grouped[status] && grouped[status].length > 0) {
+  //       // Add status header
+  //       flatArray.push({
+  //         type: "header",
+  //         status: status,
+  //         id: `header-${status}`,
+  //       });
+  //       // Add orders for this status
+  //       grouped[status].forEach((order) => {
+  //         flatArray.push({
+  //           ...order,
+  //           type: "order",
+  //         });
+  //       });
+  //     }
+  //   });
+
+  //   return flatArray;
+  // };
+
   const groupOrdersByStatus = (orders) => {
     if (!orders || orders.length === 0) return [];
+    const sortedOrders = [...orders].sort((a, b) => b.createdAt - a.createdAt);
 
-    const recentOrders = [...orders]
-      .sort((a, b) => {
-        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
-        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
-        return dateB - dateA;
-      })
-      .slice(0, 3);
-    const grouped = orders.reduce((acc, order) => {
-      const status = order.normalizedStatus?.toLowerCase();
-      if (!acc[status]) {
-        acc[status] = [];
-      }
-      acc[status].push(order);
-      return acc;
-    }, {});
+    // const sortedOrders = [...orders].sort((a, b) => {
+    //   const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+    //   const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+    //   return dateB - dateA;
+    // });
 
-    // Sort orders within each group by date (newest first)
-    Object.keys(grouped).forEach((status) => {
-      grouped[status].sort((a, b) => {
-        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
-        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
-        return dateB - dateA;
-      });
-    });
-
-    const flatArray = [];
-    if (recentOrders.length > 0) {
-      flatArray.push({
+    return [
+      {
         type: "header",
         status: "recent",
         id: "header-recent",
-      });
-      recentOrders.forEach((order) => {
-        flatArray.push({
-          ...order,
-          type: "order",
-        });
-      });
-    }
-    // Convert to flat array with headers in correct order
-    // const statusPriority = [
-    //   "Pending",
-    //   "approval pending",
-    //   "Received",
-    //   "Dispatched",
-    //   "Delivered",
-    //   "Rejected",
-    //   "cancelled",
-    // ];
-    const knownStatuses = [
-      "pending",
-      // "approval pending",
-      "approved",
-      "received",
-      "dispatch",
-      "delivered",
-      "rejected",
-      "cancelled",
+      },
+      ...sortedOrders.map((order) => ({
+        ...order,
+        type: "order",
+      })),
     ];
-    const statusPriority = [
-      ...knownStatuses,
-      // add any unknown statuses dynamically:
-      ...Object.keys(grouped).filter(
-        (status) => !knownStatuses.includes(status)
-      ),
-    ];
-
-    statusPriority.forEach((status) => {
-      if (grouped[status] && grouped[status].length > 0) {
-        // Add status header
-        flatArray.push({
-          type: "header",
-          status: status,
-          id: `header-${status}`,
-        });
-        // Add orders for this status
-        grouped[status].forEach((order) => {
-          flatArray.push({
-            ...order,
-            type: "order",
-          });
-        });
-      }
-    });
-
-    return flatArray;
   };
-
   const renderItem = ({ item }) => {
     if (item.type === "header") {
       const config =
@@ -270,7 +295,9 @@ export default function OrdersScreen() {
     return (
       <View style={styles.orderContainer}>
         <View style={styles.orderHeader}>
-          <Text style={styles.dateText}>📅 {formatDate(item.created_at)}</Text>
+          <Text style={styles.dateText}>📅 {formatDate(item.createdAt)}</Text>
+
+          {/* <Text style={styles.dateText}>📅 {formatDate(item.created_at)}</Text> */}
           <View
             style={[styles.statusBadge, { backgroundColor: config.bgColor }]}
           >
@@ -287,8 +314,9 @@ export default function OrdersScreen() {
                 {orderItem.title || orderItem.product?.productName}
               </Text>
               <Text style={styles.itemQty}>
-                {orderItem.quantity} × ₹
-                {orderItem.price || orderItem.product?.price} = ₹
+                {orderItem.quantity}x
+                {orderItem.product.qtyDescription || "unit"}
+                {/* × ₹{orderItem.price || orderItem.product?.price}  */}= ₹
                 {orderItem.quantity *
                   (parseInt(orderItem.price) || orderItem.product?.price || 0)}
               </Text>
