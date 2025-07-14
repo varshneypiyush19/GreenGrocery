@@ -832,8 +832,8 @@ export default function CheckoutScreen() {
     "16:00 pm to 18:00 pm",
     "18:00 pm to 20:00 pm",
     // "11:30 pm to 11:59 pm",
-    "20:00 pm to 22:00 pm",
-    "23:00 pm to 24:00 pm",
+    // "20:00 pm to 22:00 pm",
+    // "23:00 pm to 24:00 pm",
   ];
 
   const isSlotValid = (slot, dateType) => {
