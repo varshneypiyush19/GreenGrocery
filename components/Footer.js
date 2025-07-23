@@ -102,12 +102,9 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-// import { MaterialIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking"; // required to open dialer
-
 import Icon from "react-native-vector-icons/Ionicons";
-import { BlurView } from "expo-blur"; // Optional, for iOS-style blur
-// import CartIconWithBadge from "./CartIconWithBadge";
+import { BlurView } from "expo-blur";
 
 const TABS = [
   { name: "Home", icon: "home" },
@@ -122,7 +119,7 @@ export default function Footer() {
   const route = useRoute();
 
   const isActive = (routeName) => route.name === routeName;
-  const PHONE_NUMBER = "012414624303";
+  const PHONE_NUMBER = "01244375324";
   const handlePress = (name) => {
     if (name == "Help") {
       const phoneURL = Platform.select({
@@ -159,11 +156,6 @@ export default function Footer() {
           </Text>
         </TouchableOpacity>
       ))}
-
-      {/* <TouchableOpacity style={styles.tabButton} onPress={handlePress}>
-        <MaterialIcons name="support-agent" size={24} color="#fff" />
-        <Text style={styles.label}>Help</Text>
-      </TouchableOpacity> */}
     </View>
   );
 

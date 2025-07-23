@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const PHONE_NUMBER = "012414624303";
+const PHONE_NUMBER = "01244375324";
 
 export default function FloatingHelpButton() {
   const handlePress = () => {
